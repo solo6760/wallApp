@@ -1,0 +1,416 @@
+{
+  "artifacts": [
+    {
+      "coordinate": "androidx.annotation:annotation:1.6.0",
+      "url": "https://dl.google.com/dl/android/maven2/androidx/annotation/annotation/1.6.0/annotation-1.6.0-sources.jar",
+      "scope": "debugRuntimeClasspath",
+      "final_url": "https://dl.google.com/dl/android/maven2/androidx/annotation/annotation/1.6.0/annotation-1.6.0-sources.jar",
+      "source_files": 68,
+      "file": "annotation-1.6.0-sources.jar",
+      "sha256": "5e281c2fa5b123375a2b14a0756ee8c1bf3492eb882a6b1c3ba2775c4987283d",
+      "bytes": 63544,
+      "status": "downloaded"
+    },
+    {
+      "coordinate": "androidx.annotation:annotation-experimental:1.3.1",
+      "url": "https://dl.google.com/dl/android/maven2/androidx/annotation/annotation-experimental/1.3.1/annotation-experimental-1.3.1-sources.jar",
+      "scope": "debugRuntimeClasspath",
+      "final_url": "https://dl.google.com/dl/android/maven2/androidx/annotation/annotation-experimental/1.3.1/annotation-experimental-1.3.1-sources.jar",
+      "source_files": 4,
+      "file": "annotation-experimental-1.3.1-sources.jar",
+      "sha256": "d23e1a3f75f5cb1b45f900eb1a5bcc6accc2db841a4d3d9d334754e73ae60b2c",
+      "bytes": 5257,
+      "status": "downloaded"
+    },
+    {
+      "coordinate": "androidx.annotation:annotation-jvm:1.6.0",
+      "url": "https://dl.google.com/dl/android/maven2/androidx/annotation/annotation-jvm/1.6.0/annotation-jvm-1.6.0-sources.jar",
+      "scope": "debugRuntimeClasspath",
+      "final_url": "https://dl.google.com/dl/android/maven2/androidx/annotation/annotation-jvm/1.6.0/annotation-jvm-1.6.0-sources.jar",
+      "source_files": 68,
+      "file": "annotation-jvm-1.6.0-sources.jar",
+      "sha256": "c7b943eab2c9a1c9e815fa93ffc0edef15c7431b3fb7f509e0d00a86d8d50f5a",
+      "bytes": 64816,
+      "status": "downloaded"
+    },
+    {
+      "coordinate": "androidx.concurrent:concurrent-futures:1.2.0",
+      "url": "https://dl.google.com/dl/android/maven2/androidx/concurrent/concurrent-futures/1.2.0/concurrent-futures-1.2.0-sources.jar",
+      "scope": "debugRuntimeClasspath",
+      "final_url": "https://dl.google.com/dl/android/maven2/androidx/concurrent/concurrent-futures/1.2.0/concurrent-futures-1.2.0-sources.jar",
+      "source_files": 4,
+      "file": "concurrent-futures-1.2.0-sources.jar",
+      "sha256": "38b32cece3cce08eb0e3fb27595325f57e7a6272f085d74288f08417daf7b04f",
+      "bytes": 19788,
+      "status": "downloaded"
+    },
+    {
+      "coordinate": "androidx.exifinterface:exifinterface:1.3.6",
+      "url": "https://dl.google.com/dl/android/maven2/androidx/exifinterface/exifinterface/1.3.6/exifinterface-1.3.6-sources.jar",
+      "scope": "debugRuntimeClasspath",
+      "final_url": "https://dl.google.com/dl/android/maven2/androidx/exifinterface/exifinterface/1.3.6/exifinterface-1.3.6-sources.jar",
+      "source_files": 2,
+      "file": "exifinterface-1.3.6-sources.jar",
+      "sha256": "90df2b40e195bce9d2294ff0224f3f37d65d253ea7e804a11a835ddb3929dffa",
+      "bytes": 64738,
+      "status": "downloaded"
+    },
+    {
+      "coordinate": "androidx.media3:media3-common:1.11.1",
+      "url": "https://dl.google.com/dl/android/maven2/androidx/media3/media3-common/1.11.1/media3-common-1.11.1-sources.jar",
+      "scope": "debugRuntimeClasspath",
+      "final_url": "https://dl.google.com/dl/android/maven2/androidx/media3/media3-common/1.11.1/media3-common-1.11.1-sources.jar",
+      "source_files": 158,
+      "file": "media3-common-1.11.1-sources.jar",
+      "sha256": "c9a67ff8d485c9aeb77229a53ae91e39acdf9f591c9c8aff358307a4da031f21",
+      "bytes": 526853,
+      "status": "downloaded"
+    },
+    {
+      "coordinate": "androidx.media3:media3-container:1.11.1",
+      "url": "https://dl.google.com/dl/android/maven2/androidx/media3/media3-container/1.11.1/media3-container-1.11.1-sources.jar",
+      "scope": "debugRuntimeClasspath",
+      "final_url": "https://dl.google.com/dl/android/maven2/androidx/media3/media3-container/1.11.1/media3-container-1.11.1-sources.jar",
+      "source_files": 16,
+      "file": "media3-container-1.11.1-sources.jar",
+      "sha256": "655d0a470126610cceeec1122665d87b041d36942be4eaaab1e01ceb4504fdbd",
+      "bytes": 55412,
+      "status": "downloaded"
+    },
+    {
+      "coordinate": "androidx.media3:media3-database:1.11.1",
+      "url": "https://dl.google.com/dl/android/maven2/androidx/media3/media3-database/1.11.1/media3-database-1.11.1-sources.jar",
+      "scope": "debugRuntimeClasspath",
+      "final_url": "https://dl.google.com/dl/android/maven2/androidx/media3/media3-database/1.11.1/media3-database-1.11.1-sources.jar",
+      "source_files": 7,
+      "file": "media3-database-1.11.1-sources.jar",
+      "sha256": "1baca4ff0a32e76d08b92ed5d33e0278aa34a9e9c537edbc2fd39573e8ec46a3",
+      "bytes": 8391,
+      "status": "downloaded"
+    },
+    {
+      "coordinate": "androidx.media3:media3-datasource:1.11.1",
+      "url": "https://dl.google.com/dl/android/maven2/androidx/media3/media3-datasource/1.11.1/media3-datasource-1.11.1-sources.jar",
+      "scope": "debugRuntimeClasspath",
+      "final_url": "https://dl.google.com/dl/android/maven2/androidx/media3/media3-datasource/1.11.1/media3-datasource-1.11.1-sources.jar",
+      "source_files": 57,
+      "file": "media3-datasource-1.11.1-sources.jar",
+      "sha256": "a54ddd9858ed2de57e07c5461dcebdae7a53d92a60210a2a3f5bf501398a5e4a",
+      "bytes": 139089,
+      "status": "downloaded"
+    },
+    {
+      "coordinate": "androidx.media3:media3-decoder:1.11.1",
+      "url": "https://dl.google.com/dl/android/maven2/androidx/media3/media3-decoder/1.11.1/media3-decoder-1.11.1-sources.jar",
+      "scope": "debugRuntimeClasspath",
+      "final_url": "https://dl.google.com/dl/android/maven2/androidx/media3/media3-decoder/1.11.1/media3-decoder-1.11.1-sources.jar",
+      "source_files": 12,
+      "file": "media3-decoder-1.11.1-sources.jar",
+      "sha256": "1570e072a3c4a8b9915f95bada24f0e4955e4fc4343d738adbb2794d9539d9c5",
+      "bytes": 19473,
+      "status": "downloaded"
+    },
+    {
+      "coordinate": "androidx.media3:media3-exoplayer:1.11.1",
+      "url": "https://dl.google.com/dl/android/maven2/androidx/media3/media3-exoplayer/1.11.1/media3-exoplayer-1.11.1-sources.jar",
+      "scope": "debugRuntimeClasspath",
+      "final_url": "https://dl.google.com/dl/android/maven2/androidx/media3/media3-exoplayer/1.11.1/media3-exoplayer-1.11.1-sources.jar",
+      "source_files": 352,
+      "file": "media3-exoplayer-1.11.1-sources.jar",
+      "sha256": "a13b3e52cf278f147020d9b98f29ebd5a19e1dc0798f02595c6849291eb33233",
+      "bytes": 1230148,
+      "status": "downloaded"
+    },
+    {
+      "coordinate": "androidx.media3:media3-exoplayer-dash:1.11.1",
+      "url": "https://dl.google.com/dl/android/maven2/androidx/media3/media3-exoplayer-dash/1.11.1/media3-exoplayer-dash-1.11.1-sources.jar",
+      "scope": "debugRuntimeClasspath",
+      "final_url": "https://dl.google.com/dl/android/maven2/androidx/media3/media3-exoplayer-dash/1.11.1/media3-exoplayer-dash-1.11.1-sources.jar",
+      "source_files": 31,
+      "file": "media3-exoplayer-dash-1.11.1-sources.jar",
+      "sha256": "db452698d05cd7fcf3f9e35ae38fb7cc68eeeef4c5bc08901d1accd237a46c7f",
+      "bytes": 101305,
+      "status": "downloaded"
+    },
+    {
+      "coordinate": "androidx.media3:media3-exoplayer-hls:1.11.1",
+      "url": "https://dl.google.com/dl/android/maven2/androidx/media3/media3-exoplayer-hls/1.11.1/media3-exoplayer-hls-1.11.1-sources.jar",
+      "scope": "debugRuntimeClasspath",
+      "final_url": "https://dl.google.com/dl/android/maven2/androidx/media3/media3-exoplayer-hls/1.11.1/media3-exoplayer-hls-1.11.1-sources.jar",
+      "source_files": 38,
+      "file": "media3-exoplayer-hls-1.11.1-sources.jar",
+      "sha256": "27f36d1714018c7b2a17656f8b5fbf3e93b6bec72aac82990c9ae0fab34a3160",
+      "bytes": 173444,
+      "status": "downloaded"
+    },
+    {
+      "coordinate": "androidx.media3:media3-extractor:1.11.1",
+      "url": "https://dl.google.com/dl/android/maven2/androidx/media3/media3-extractor/1.11.1/media3-extractor-1.11.1-sources.jar",
+      "scope": "debugRuntimeClasspath",
+      "final_url": "https://dl.google.com/dl/android/maven2/androidx/media3/media3-extractor/1.11.1/media3-extractor-1.11.1-sources.jar",
+      "source_files": 280,
+      "file": "media3-extractor-1.11.1-sources.jar",
+      "sha256": "547129d7df7ef9cc3d2622036d3880ab205e5fe3241095049b39c6632c64bc4a",
+      "bytes": 705485,
+      "status": "downloaded"
+    },
+    {
+      "coordinate": "com.android.tools:desugar_jdk_libs_configuration_nio:2.1.5",
+      "url": "https://dl.google.com/dl/android/maven2/com/android/tools/desugar_jdk_libs_configuration_nio/2.1.5/desugar_jdk_libs_configuration_nio-2.1.5-sources.jar",
+      "scope": "coreLibraryDesugaring",
+      "status": "unavailable",
+      "error": "HTTP Error 404: Not Found",
+      "note": "No source classifier. Companion configuration generation lives in R8; exact configuration source revision not established. See README.md blocker."
+    },
+    {
+      "coordinate": "com.android.tools:desugar_jdk_libs_nio:2.1.5",
+      "url": "https://dl.google.com/dl/android/maven2/com/android/tools/desugar_jdk_libs_nio/2.1.5/desugar_jdk_libs_nio-2.1.5-sources.jar",
+      "scope": "coreLibraryDesugaring",
+      "status": "upstream-source-candidate",
+      "error": "HTTP Error 404: Not Found",
+      "covered_by": "desugar_jdk_libs-2.1.5-73170c345e6a762fc6a1f0301bb15218850023ef-source.zip",
+      "note": "Immutable upstream commit explicitly prepares 2.1.5; no source classifier or release tag. Maven binary correspondence has not been independently proven."
+    },
+    {
+      "coordinate": "com.github.TeamNewPipe:NewPipeExtractor:v0.26.5",
+      "url": "https://jitpack.io/com/github/TeamNewPipe/NewPipeExtractor/v0.26.5/NewPipeExtractor-v0.26.5-sources.jar",
+      "scope": "debugRuntimeClasspath",
+      "final_url": "https://jitpack.io/com/github/TeamNewPipe/NewPipeExtractor/v0.26.5/NewPipeExtractor-v0.26.5-sources.jar",
+      "source_files": 359,
+      "file": "NewPipeExtractor-v0.26.5-sources.jar",
+      "sha256": "693c1e23cfaae77af3693af2441261ab89d55a89b11a35d36ecdec03dbb4e7c8",
+      "bytes": 512084,
+      "status": "downloaded"
+    },
+    {
+      "coordinate": "com.github.TeamNewPipe:nanojson:e9d656ddb49a412a5a0a5d5ef20ca7ef09549996",
+      "url": "https://jitpack.io/com/github/TeamNewPipe/nanojson/e9d656ddb49a412a5a0a5d5ef20ca7ef09549996/nanojson-e9d656ddb49a412a5a0a5d5ef20ca7ef09549996-sources.jar",
+      "scope": "debugRuntimeClasspath",
+      "final_url": "https://jitpack.io/com/github/TeamNewPipe/nanojson/e9d656ddb49a412a5a0a5d5ef20ca7ef09549996/nanojson-e9d656ddb49a412a5a0a5d5ef20ca7ef09549996-sources.jar",
+      "source_files": 15,
+      "file": "nanojson-e9d656ddb49a412a5a0a5d5ef20ca7ef09549996-sources.jar",
+      "sha256": "a4ac5f0d7163220039527b45cc846df44e66a3293ac10af85a2d35b204a8e82d",
+      "bytes": 29880,
+      "status": "downloaded"
+    },
+    {
+      "coordinate": "com.google.code.findbugs:jsr305:3.0.2",
+      "url": "https://repo.maven.apache.org/maven2/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2-sources.jar",
+      "scope": "debugRuntimeClasspath",
+      "final_url": "https://repo.maven.apache.org/maven2/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2-sources.jar",
+      "source_files": 31,
+      "file": "jsr305-3.0.2-sources.jar",
+      "sha256": "1c9e85e272d0708c6a591dc74828c71603053b48cc75ae83cce56912a2aa063b",
+      "bytes": 18102,
+      "status": "downloaded"
+    },
+    {
+      "coordinate": "com.google.guava:failureaccess:1.0.2",
+      "url": "https://repo.maven.apache.org/maven2/com/google/guava/failureaccess/1.0.2/failureaccess-1.0.2-sources.jar",
+      "scope": "debugRuntimeClasspath",
+      "final_url": "https://repo.maven.apache.org/maven2/com/google/guava/failureaccess/1.0.2/failureaccess-1.0.2-sources.jar",
+      "source_files": 2,
+      "file": "failureaccess-1.0.2-sources.jar",
+      "sha256": "dd3bfa5e2ec5bc5397efb2c3cef044c192313ff77089573667ff97a60c6978e0",
+      "bytes": 3489,
+      "status": "downloaded"
+    },
+    {
+      "coordinate": "com.google.guava:guava:33.3.1-android",
+      "url": "https://repo.maven.apache.org/maven2/com/google/guava/guava/33.3.1-android/guava-33.3.1-android-sources.jar",
+      "scope": "debugRuntimeClasspath",
+      "final_url": "https://repo.maven.apache.org/maven2/com/google/guava/guava/33.3.1-android/guava-33.3.1-android-sources.jar",
+      "source_files": 615,
+      "file": "guava-33.3.1-android-sources.jar",
+      "sha256": "1933a9fb7ee8535749600d7298fa9511589631010e90907db8459797c31238ca",
+      "bytes": 1825657,
+      "status": "downloaded"
+    },
+    {
+      "coordinate": "com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava",
+      "url": "https://repo.maven.apache.org/maven2/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava-sources.jar",
+      "scope": "debugRuntimeClasspath",
+      "status": "empty-artifact",
+      "error": "HTTP Error 404: Not Found",
+      "covered_by": "guava-33.3.1-android-sources.jar",
+      "note": "Empty conflict-avoidance artifact; actual ListenableFuture source is in Guava. No source classifier is published."
+    },
+    {
+      "coordinate": "com.google.protobuf:protobuf-javalite:4.35.1",
+      "url": "https://repo.maven.apache.org/maven2/com/google/protobuf/protobuf-javalite/4.35.1/protobuf-javalite-4.35.1-sources.jar",
+      "scope": "debugRuntimeClasspath",
+      "final_url": "https://repo.maven.apache.org/maven2/com/google/protobuf/protobuf-javalite/4.35.1/protobuf-javalite-4.35.1-sources.jar",
+      "source_files": 162,
+      "file": "protobuf-javalite-4.35.1-sources.jar",
+      "sha256": "de71721d787177c241461f8c4b36ae16394bffeb1e7dcbc0a85e76a5d943b124",
+      "bytes": 461109,
+      "status": "downloaded"
+    },
+    {
+      "coordinate": "com.squareup.okhttp3:okhttp:4.12.0",
+      "url": "https://repo.maven.apache.org/maven2/com/squareup/okhttp3/okhttp/4.12.0/okhttp-4.12.0-sources.jar",
+      "scope": "debugRuntimeClasspath",
+      "final_url": "https://repo.maven.apache.org/maven2/com/squareup/okhttp3/okhttp/4.12.0/okhttp-4.12.0-sources.jar",
+      "source_files": 123,
+      "file": "okhttp-4.12.0-sources.jar",
+      "sha256": "d91a769a4140e542cddbac4e67fcf279299614e8bfd53bd23b85e60c2861341c",
+      "bytes": 368316,
+      "status": "downloaded"
+    },
+    {
+      "coordinate": "com.squareup.okio:okio:3.6.0",
+      "url": "https://repo.maven.apache.org/maven2/com/squareup/okio/okio/3.6.0/okio-3.6.0-sources.jar",
+      "scope": "debugRuntimeClasspath",
+      "final_url": "https://repo.maven.apache.org/maven2/com/squareup/okio/okio/3.6.0/okio-3.6.0-sources.jar",
+      "source_files": 70,
+      "file": "okio-3.6.0-sources.jar",
+      "sha256": "64d5b6667f064511dd93100173f735b2d5052a1c926858f4b6a05b84e825ef94",
+      "bytes": 137572,
+      "status": "downloaded"
+    },
+    {
+      "coordinate": "com.squareup.okio:okio-jvm:3.6.0",
+      "url": "https://repo.maven.apache.org/maven2/com/squareup/okio/okio-jvm/3.6.0/okio-jvm-3.6.0-sources.jar",
+      "scope": "debugRuntimeClasspath",
+      "final_url": "https://repo.maven.apache.org/maven2/com/squareup/okio/okio-jvm/3.6.0/okio-jvm-3.6.0-sources.jar",
+      "source_files": 77,
+      "file": "okio-jvm-3.6.0-sources.jar",
+      "sha256": "870a42a7b468af8fd24d67b7b62e5861aab398c56f15a80b10642e7001564e2f",
+      "bytes": 168730,
+      "status": "downloaded"
+    },
+    {
+      "coordinate": "org.jetbrains:annotations:13.0",
+      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/annotations/13.0/annotations-13.0-sources.jar",
+      "scope": "debugRuntimeClasspath",
+      "final_url": "https://repo.maven.apache.org/maven2/org/jetbrains/annotations/13.0/annotations-13.0-sources.jar",
+      "source_files": 16,
+      "file": "annotations-13.0-sources.jar",
+      "sha256": "42a5e144b8e81d50d6913d1007b695e62e614705268d8cf9f13dbdc478c2c68e",
+      "bytes": 17566,
+      "status": "downloaded"
+    },
+    {
+      "coordinate": "org.jetbrains.kotlin:kotlin-stdlib:2.2.10",
+      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/2.2.10/kotlin-stdlib-2.2.10-sources.jar",
+      "scope": "debugRuntimeClasspath",
+      "final_url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/2.2.10/kotlin-stdlib-2.2.10-sources.jar",
+      "source_files": 405,
+      "file": "kotlin-stdlib-2.2.10-sources.jar",
+      "sha256": "2983f21e626325f256bc4443c7fe45a83912bba077be119142f68210c0548173",
+      "bytes": 698990,
+      "status": "downloaded"
+    },
+    {
+      "coordinate": "org.jetbrains.kotlin:kotlin-stdlib-common:2.2.10",
+      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-common/2.2.10/kotlin-stdlib-common-2.2.10-sources.jar",
+      "scope": "debugRuntimeClasspath",
+      "status": "metadata-only",
+      "error": "HTTP Error 404: Not Found",
+      "covered_by": "kotlin-stdlib-2.2.10-sources.jar",
+      "note": "Published Gradle module contains no binary, only a dependency on kotlin-stdlib 2.2.10.",
+      "metadata_url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-common/2.2.10/kotlin-stdlib-common-2.2.10.module"
+    },
+    {
+      "coordinate": "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.10",
+      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-jdk7/1.9.10/kotlin-stdlib-jdk7-1.9.10-sources.jar",
+      "scope": "debugRuntimeClasspath",
+      "final_url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-jdk7/1.9.10/kotlin-stdlib-jdk7-1.9.10-sources.jar",
+      "source_files": 1,
+      "file": "kotlin-stdlib-jdk7-1.9.10-sources.jar",
+      "sha256": "ea10d3e5e6e695d8a5283cbf116321acae6ba42d0bdd3eda50f7c34a26fa25cb",
+      "bytes": 580,
+      "status": "downloaded"
+    },
+    {
+      "coordinate": "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.10",
+      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-jdk8/1.9.10/kotlin-stdlib-jdk8-1.9.10-sources.jar",
+      "scope": "debugRuntimeClasspath",
+      "final_url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-jdk8/1.9.10/kotlin-stdlib-jdk8-1.9.10-sources.jar",
+      "source_files": 1,
+      "file": "kotlin-stdlib-jdk8-1.9.10-sources.jar",
+      "sha256": "40e9a80f6b953d12389623760d438e69914098d0c4d7053f70f90533ec041259",
+      "bytes": 556,
+      "status": "downloaded"
+    },
+    {
+      "coordinate": "org.jsoup:jsoup:1.22.2",
+      "url": "https://repo.maven.apache.org/maven2/org/jsoup/jsoup/1.22.2/jsoup-1.22.2-sources.jar",
+      "scope": "debugRuntimeClasspath",
+      "final_url": "https://repo.maven.apache.org/maven2/org/jsoup/jsoup/1.22.2/jsoup-1.22.2-sources.jar",
+      "source_files": 87,
+      "file": "jsoup-1.22.2-sources.jar",
+      "sha256": "3aed3e38ec1e0373eb6755213b01d197802f858850bce20e63d99c93e08818bc",
+      "bytes": 271783,
+      "status": "downloaded"
+    },
+    {
+      "coordinate": "org.mozilla:rhino:1.8.1",
+      "url": "https://repo.maven.apache.org/maven2/org/mozilla/rhino/1.8.1/rhino-1.8.1-sources.jar",
+      "scope": "debugRuntimeClasspath",
+      "final_url": "https://repo.maven.apache.org/maven2/org/mozilla/rhino/1.8.1/rhino-1.8.1-sources.jar",
+      "source_files": 312,
+      "file": "rhino-1.8.1-sources.jar",
+      "sha256": "2303a0e5aa222faae0b95865c25442da89ec14c0fc81ac1608f2a6095e3d2459",
+      "bytes": 912671,
+      "status": "downloaded"
+    },
+    {
+      "coordinate": "org.mozilla:rhino-engine:1.8.1",
+      "url": "https://repo.maven.apache.org/maven2/org/mozilla/rhino-engine/1.8.1/rhino-engine-1.8.1-sources.jar",
+      "scope": "debugRuntimeClasspath",
+      "final_url": "https://repo.maven.apache.org/maven2/org/mozilla/rhino-engine/1.8.1/rhino-engine-1.8.1-sources.jar",
+      "source_files": 7,
+      "file": "rhino-engine-1.8.1-sources.jar",
+      "sha256": "c3316bdfd713c92d2688ea921b5cc7568a5a879ecd395847559407862fce5089",
+      "bytes": 9007,
+      "status": "downloaded"
+    }
+  ],
+  "upstream_archives": [
+    {
+      "file": "NewPipeExtractor-v0.26.5-upstream-source.zip",
+      "url": "https://codeload.github.com/TeamNewPipe/NewPipeExtractor/zip/refs/tags/v0.26.5",
+      "components": [
+        "com.github.TeamNewPipe:NewPipeExtractor:v0.26.5"
+      ],
+      "final_url": "https://codeload.github.com/TeamNewPipe/NewPipeExtractor/zip/refs/tags/v0.26.5",
+      "upstream_sha256": "59a67ac0391985f2881f9dff6c4973b9ac776b8fe9ae52eab667354c6019b293",
+      "status": "downloaded",
+      "sha256": "2f2b4845a4c9e65fc4cf578c0306128ae8726992214e0cf1bd4eeda8702fc20b",
+      "bytes": 35504559,
+      "omitted_binary_entries": [
+        "NewPipeExtractor-0.26.5/gradle/wrapper/gradle-wrapper.jar"
+      ],
+      "transformation": "ZIP repacked retaining source/resources/notices/build files; compiled binary entries excluded"
+    },
+    {
+      "file": "nanojson-e9d656ddb49a412a5a0a5d5ef20ca7ef09549996-upstream-source.zip",
+      "url": "https://codeload.github.com/TeamNewPipe/nanojson/zip/e9d656ddb49a412a5a0a5d5ef20ca7ef09549996",
+      "components": [
+        "com.github.TeamNewPipe:nanojson:e9d656ddb49a412a5a0a5d5ef20ca7ef09549996"
+      ],
+      "final_url": "https://codeload.github.com/TeamNewPipe/nanojson/zip/e9d656ddb49a412a5a0a5d5ef20ca7ef09549996",
+      "upstream_sha256": "1c1beef8184bd10709e12b7875437e18f96b3b72c574f3bb924afd38a30b90e8",
+      "status": "downloaded",
+      "sha256": "f7351b93d1199d4bd9ab17f89b33f9a7d2ef41df882975784fc6f06ee7454e64",
+      "bytes": 327305,
+      "omitted_binary_entries": [],
+      "transformation": "ZIP repacked retaining source/resources/notices/build files; compiled binary entries excluded"
+    },
+    {
+      "file": "desugar_jdk_libs-2.1.5-73170c345e6a762fc6a1f0301bb15218850023ef-source.zip",
+      "url": "https://codeload.github.com/google/desugar_jdk_libs/zip/73170c345e6a762fc6a1f0301bb15218850023ef",
+      "components": [
+        "com.android.tools:desugar_jdk_libs_nio:2.1.5"
+      ],
+      "final_url": "https://codeload.github.com/google/desugar_jdk_libs/zip/73170c345e6a762fc6a1f0301bb15218850023ef",
+      "upstream_sha256": "cf0b48cb046b6517ed8e2a816c125116a907e13e48e341882ba6f4016a155d9f",
+      "status": "downloaded",
+      "sha256": "1e5bdd279bcfc1a291357858a997535c06d63789b517b38dd9dac9562ffe0550",
+      "bytes": 29949334,
+      "omitted_binary_entries": [],
+      "transformation": "ZIP repacked retaining source/resources/notices/build files; compiled binary entries excluded"
+    }
+  ]
+}

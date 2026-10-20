@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<lint>
+    <!-- Personal sideload build for Android 12, not a Play Store submission. -->
+    <issue id="ExpiredTargetSdkVersion" severity="ignore" />
+</lint>

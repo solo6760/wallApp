@@ -1,0 +1,12 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+ <uses-permission android:name="android.permission.INTERNET"/><uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+ <uses-feature android:name="android.software.leanback" android:required="false"/><uses-feature android:name="android.hardware.touchscreen" android:required="false"/>
+ <application android:label="Ambient Flow" android:theme="@style/AppTheme" android:icon="@drawable/icon" android:banner="@drawable/banner" android:allowBackup="false" android:usesCleartextTraffic="false" android:largeHeap="false">
+  <activity android:name=".MainActivity" android:exported="true" android:screenOrientation="landscape"><intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LEANBACK_LAUNCHER"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter></activity>
+  <activity android:name=".SettingsActivity" android:exported="true" android:screenOrientation="landscape"/>
+  <activity android:name=".NoticesActivity" android:exported="false" android:screenOrientation="landscape"/>
+    <activity android:name=".ImageDetailsActivity" android:exported="false" android:screenOrientation="landscape"/>
+    <activity android:name=".AmbientActivity" android:exported="true" android:screenOrientation="landscape"/>
+  <service android:name=".AmbientDreamService" android:label="Ambient Flow" android:exported="true" android:permission="android.permission.BIND_DREAM_SERVICE"><intent-filter><action android:name="android.service.dreams.DreamService"/></intent-filter><meta-data android:name="android.service.dream" android:resource="@xml/dream"/></service>
+ </application>
+</manifest>

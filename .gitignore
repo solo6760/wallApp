@@ -1,0 +1,9 @@
+.gradle/
+.gradle-home/
+.android/
+local.properties
+**/build/
+dist/
+__pycache__/
+*.jks
+*.keystore
