@@ -1,0 +1,38 @@
+{
+  "version": 2,
+  "provider": "Wikimedia Commons",
+  "mode": "automatic-curated-commons",
+  "cities": ["Tokyo", "New York", "Hong Kong", "Singapore", "London", "Chicago", "Seoul"],
+  "required": {
+    "licenses": ["CC0", "Public domain"],
+    "attributionRequired": false,
+    "restrictions": "",
+    "sourceMinWidth": 3840,
+    "sourceMinHeight": 2160,
+    "sourceMaxWidth": 7680,
+    "sourceMaxHeight": 5120,
+    "sourceMaxBytes": 16777216,
+    "sourceMime": "image/jpeg",
+    "delivery": "api-returned-standard-3840px-thumbnail",
+    "deliveryMinWidth": 3840,
+    "deliveryMinHeight": 2160,
+    "outputWidth": 3840,
+    "outputHeight": 2160,
+    "upscaling": false
+  },
+  "photos": [
+    {"id": "115972176", "city": "Tokyo", "title": "2015-01-17 Skyline in Tokyo.jpg"},
+    {"id": "150237193", "city": "New York", "title": "New York City skyline from ferry.jpg"},
+    {"id": "39288658", "city": "Hong Kong", "title": "Hong Kong Island from Kowloon - DSC00683.JPG"},
+    {"id": "82582712", "city": "Singapore", "title": "Singapore night.jpg"},
+
+    {"id": "27551649", "city": "Chicago", "title": "Chicago Skyline - Dusk.JPG"},
+    {"id": "156637992", "city": "Seoul", "title": "Seocho-gu Skyline from Han River — Dec 2023.jpg"},
+    {"id": "128979726", "city": "Tokyo", "title": "Roppongi at night seen from Shibuya Stream.jpg"},
+    {"id": "82523616", "city": "New York", "title": "Skyline of Manhattan.jpg"},
+    {"id": "176481871", "city": "Hong Kong", "title": "Hong Kong Skyline1.jpg"},
+    {"id": "61752098", "city": "Singapore", "title": "Chuttersnap 2016-12-23 (Unsplash 6pMroQXkgsw).jpg"},
+    {"id": "179321546", "city": "London", "title": "City of London skyline from Dawson Heights, Dulwich (1).jpg"},
+    {"id": "177756261", "city": "Chicago", "title": "Chicago Loop Skyline at Sunset.jpg"}
+  ]
+}

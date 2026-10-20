@@ -16,6 +16,7 @@ import kotlin.math.roundToInt
 class FlowView(context: Context) : View(context) {
     private val prefs = Prefs(context)
     private val geometry = FilamentGeometry()
+    private val composition = FilamentComposition().apply { update(0.0, 0.0, prefs.str("composition", "Automatic")) }
     private val paths = Array(geometry.strandCount) { Path() }
     private val highlights = Array(geometry.strandCount) { Path() }
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply { strokeCap = Paint.Cap.ROUND; strokeJoin = Paint.Join.ROUND }
@@ -47,7 +48,9 @@ class FlowView(context: Context) : View(context) {
             val dt = (now - last).coerceIn(0L, 100L) / 1000.0
             val advance = dt * speed * if (prefs.bool("reduced")) 0.15 else 1.0
             time += advance
-            if (advance > 0.0) geometryDirty = true
+            val wasTransitioning = composition.transitioning
+            composition.update(time, dt, prefs.str("composition", "Automatic"))
+            if (advance > 0.0 || wasTransitioning || composition.transitioning) geometryDirty = true
             last = now
             if (now - hourChecked > 60_000L || hourChecked == 0L) {
                 calendar.timeInMillis = System.currentTimeMillis()
@@ -66,7 +69,7 @@ class FlowView(context: Context) : View(context) {
                 if (color != colors[i]) { colors[i] = color; backgroundDirty = true }
             }
             invalidate()
-            postDelayed(this, if (speed == 0.0) 1000L else 33L)
+            postDelayed(this, if (speed == 0.0 && !composition.transitioning) 1000L else 33L)
         }
     }
 
@@ -79,7 +82,7 @@ class FlowView(context: Context) : View(context) {
     }
 
     private fun rebuildPaths() {
-        geometry.update(time, width.toDouble() / height)
+        geometry.update(time, width.toDouble() / height, composition.weights)
         for (i in geometry.strands.indices) {
             val strand = geometry.strands[i]
             val path = paths[i]
@@ -148,6 +151,7 @@ class FlowView(context: Context) : View(context) {
     }
 
     companion object {
+        val compositions = FilamentComposition.names
         val names = arrayOf("Automatic", "Morning", "Afternoon", "Evening", "Night", "Sage")
         // Keep the original four mood families and their indices stable for saved preferences.
         val palettes = arrayOf(

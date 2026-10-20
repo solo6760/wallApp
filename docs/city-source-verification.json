@@ -1,0 +1,1345 @@
+{
+  "schemaVersion": 2,
+  "provider": "Wikimedia Commons",
+  "checkedAt": "2026-10-20T22:01:13.465845+00:00",
+  "mode": "automatic-curated-commons",
+  "runtimeNetworking": true,
+  "sources": [
+    "https://www.mediawiki.org/wiki/API:Imageinfo",
+    "https://commons.wikimedia.org/wiki/Commons:Reusing_content_outside_Wikimedia",
+    "https://creativecommons.org/publicdomain/zero/1.0/",
+    "https://creativecommons.org/publicdomain/mark/1.0/"
+  ],
+  "method": "Live documented API metadata + standard 3840px API-returned JPEG rendition + full Pillow decode + center crop without upscaling. No manually constructed thumbnail URL.",
+  "archiveReference": "Read CityRepository.kt directly from dist/AmbientFlow-source.zip without extraction/overwrite.",
+  "photos": [
+    {
+      "id": "115972176",
+      "city": "Tokyo",
+      "title": "File:2015-01-17 Skyline in Tokyo.jpg",
+      "creator": "╬ಠ益ಠ)",
+      "license": "CC0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:2015-01-17_Skyline_in_Tokyo.jpg",
+      "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/97/2015-01-17_Skyline_in_Tokyo.jpg/3840px-2015-01-17_Skyline_in_Tokyo.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/9/97/2015-01-17_Skyline_in_Tokyo.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "sourceDimensions": [
+        5472,
+        3648
+      ],
+      "deliveredDimensions": [
+        3840,
+        2560
+      ],
+      "deliveredBytes": 1842862,
+      "deliveredMime": "image/jpeg",
+      "deliveredSha256": "dae9afa3555f73f98964745531d9af0709e2b3eebf40d9c89c69f794baef73cf",
+      "cropBox": [
+        0,
+        200,
+        3840,
+        2360
+      ],
+      "outputDimensions": [
+        3840,
+        2160
+      ],
+      "outputJpegProbeBytes": 1745793,
+      "extmetadata": {
+        "Categories": {
+          "value": "CC-Zero|January 2015 in Tokyo|Skylines in Tokyo|Flickr images reviewed by FlickreviewR 2|Flickr images missing SDC published in",
+          "source": "commons-categories",
+          "hidden": ""
+        },
+        "ImageDescription": {
+          "value": "Skyline in Tokyo",
+          "source": "commons-desc-page"
+        },
+        "Credit": {
+          "value": "<a rel=\"nofollow\" class=\"external free\" href=\"https://www.flickr.com/photos/generalec/16165128947/\">https://www.flickr.com/photos/generalec/16165128947/</a>",
+          "source": "commons-desc-page"
+        },
+        "Artist": {
+          "value": "╬ಠ益ಠ)",
+          "source": "commons-desc-page"
+        },
+        "LicenseShortName": {
+          "value": "CC0",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "UsageTerms": {
+          "value": "Creative Commons Zero, Public Domain Dedication",
+          "source": "commons-desc-page"
+        },
+        "AttributionRequired": {
+          "value": "false",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "LicenseUrl": {
+          "value": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+          "source": "commons-desc-page"
+        },
+        "Copyrighted": {
+          "value": "True",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "Restrictions": {
+          "value": "",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "License": {
+          "value": "cc0",
+          "source": "commons-templates",
+          "hidden": ""
+        }
+      },
+      "normalizedMetadata": {
+        "Categories": "CC-Zero|January 2015 in Tokyo|Skylines in Tokyo|Flickr images reviewed by FlickreviewR 2|Flickr images missing SDC published in",
+        "ImageDescription": "Skyline in Tokyo",
+        "Credit": "https://www.flickr.com/photos/generalec/16165128947/",
+        "Artist": "╬ಠ益ಠ)",
+        "LicenseShortName": "CC0",
+        "UsageTerms": "Creative Commons Zero, Public Domain Dedication",
+        "AttributionRequired": "false",
+        "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "Copyrighted": "True",
+        "Restrictions": "",
+        "License": "cc0"
+      },
+      "status": "network-verified",
+      "visualReview": "Cityscape/skyline visible in reviewed contact sheet; city identification supported by Commons metadata"
+    },
+    {
+      "id": "150237193",
+      "city": "New York",
+      "title": "File:New York City skyline from ferry.jpg",
+      "creator": "FrameOverdose",
+      "license": "CC0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:New_York_City_skyline_from_ferry.jpg",
+      "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fc/New_York_City_skyline_from_ferry.jpg/3840px-New_York_City_skyline_from_ferry.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/f/fc/New_York_City_skyline_from_ferry.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "sourceDimensions": [
+        4032,
+        3024
+      ],
+      "deliveredDimensions": [
+        3840,
+        2880
+      ],
+      "deliveredBytes": 1440795,
+      "deliveredMime": "image/jpeg",
+      "deliveredSha256": "3b6d6abbd3957e0e82d4d170d20d0e4f3986fac614e56e65ace163291a19fdef",
+      "cropBox": [
+        0,
+        360,
+        3840,
+        2520
+      ],
+      "outputDimensions": [
+        3840,
+        2160
+      ],
+      "outputJpegProbeBytes": 1182539,
+      "extmetadata": {
+        "Categories": {
+          "value": "CC-Zero|Views from the Staten Island Ferry|New York City photographs taken on 2023-03-31|Self-published work|Financial District, Manhattan skylines in 2023|March 2023 in Manhattan, New York City|Lower Manhattan skylines from Upper New York Bay",
+          "source": "commons-categories",
+          "hidden": ""
+        },
+        "ImageDescription": {
+          "value": "Picture of the new york city skyline taken from staten island ferry",
+          "source": "commons-desc-page"
+        },
+        "Credit": {
+          "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+          "source": "commons-desc-page"
+        },
+        "Artist": {
+          "value": "<a rel=\"mw:WikiLink\" href=\"https://commons.wikimedia.org/wiki/User:FrameOverdose\" title=\"User:FrameOverdose\">FrameOverdose</a>",
+          "source": "commons-desc-page"
+        },
+        "LicenseShortName": {
+          "value": "CC0",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "UsageTerms": {
+          "value": "Creative Commons Zero, Public Domain Dedication",
+          "source": "commons-desc-page"
+        },
+        "AttributionRequired": {
+          "value": "false",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "LicenseUrl": {
+          "value": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+          "source": "commons-desc-page"
+        },
+        "Copyrighted": {
+          "value": "True",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "Restrictions": {
+          "value": "",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "License": {
+          "value": "cc0",
+          "source": "commons-templates",
+          "hidden": ""
+        }
+      },
+      "normalizedMetadata": {
+        "Categories": "CC-Zero|Views from the Staten Island Ferry|New York City photographs taken on 2023-03-31|Self-published work|Financial District, Manhattan skylines in 2023|March 2023 in Manhattan, New York City|Lower Manhattan skylines from Upper New York Bay",
+        "ImageDescription": "Picture of the new york city skyline taken from staten island ferry",
+        "Credit": "Own work",
+        "Artist": "FrameOverdose",
+        "LicenseShortName": "CC0",
+        "UsageTerms": "Creative Commons Zero, Public Domain Dedication",
+        "AttributionRequired": "false",
+        "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "Copyrighted": "True",
+        "Restrictions": "",
+        "License": "cc0"
+      },
+      "status": "network-verified",
+      "visualReview": "Cityscape/skyline visible in reviewed contact sheet; city identification supported by Commons metadata"
+    },
+    {
+      "id": "39288658",
+      "city": "Hong Kong",
+      "title": "File:Hong Kong Island from Kowloon - DSC00683.JPG",
+      "creator": "Daderot",
+      "license": "CC0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Hong_Kong_Island_from_Kowloon_-_DSC00683.JPG",
+      "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8e/Hong_Kong_Island_from_Kowloon_-_DSC00683.JPG/3840px-Hong_Kong_Island_from_Kowloon_-_DSC00683.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/8/8e/Hong_Kong_Island_from_Kowloon_-_DSC00683.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "sourceDimensions": [
+        5472,
+        3648
+      ],
+      "deliveredDimensions": [
+        3840,
+        2560
+      ],
+      "deliveredBytes": 1872568,
+      "deliveredMime": "image/jpeg",
+      "deliveredSha256": "387218e040e1010c11b0ee960faee59b474a1cfa9b04da800b063af5f0eccb4d",
+      "cropBox": [
+        0,
+        200,
+        3840,
+        2360
+      ],
+      "outputDimensions": [
+        3840,
+        2160
+      ],
+      "outputJpegProbeBytes": 1773070,
+      "extmetadata": {
+        "Categories": {
+          "value": "CC-Zero|Self-published work|Files uploaded by Daderot|Hong Kong skylines (Wan Chai District)",
+          "source": "commons-categories",
+          "hidden": ""
+        },
+        "ImageDescription": {
+          "value": "Hong Kong Island from Kowloon Public Pier.",
+          "source": "commons-desc-page"
+        },
+        "Credit": {
+          "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+          "source": "commons-desc-page"
+        },
+        "Artist": {
+          "value": "<a href=\"//commons.wikimedia.org/wiki/User:Daderot\" title=\"User:Daderot\">Daderot</a>",
+          "source": "commons-desc-page"
+        },
+        "LicenseShortName": {
+          "value": "CC0",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "UsageTerms": {
+          "value": "Creative Commons Zero, Public Domain Dedication",
+          "source": "commons-desc-page"
+        },
+        "AttributionRequired": {
+          "value": "false",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "LicenseUrl": {
+          "value": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+          "source": "commons-desc-page"
+        },
+        "Copyrighted": {
+          "value": "True",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "Restrictions": {
+          "value": "",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "License": {
+          "value": "cc0",
+          "source": "commons-templates",
+          "hidden": ""
+        }
+      },
+      "normalizedMetadata": {
+        "Categories": "CC-Zero|Self-published work|Files uploaded by Daderot|Hong Kong skylines (Wan Chai District)",
+        "ImageDescription": "Hong Kong Island from Kowloon Public Pier.",
+        "Credit": "Own work",
+        "Artist": "Daderot",
+        "LicenseShortName": "CC0",
+        "UsageTerms": "Creative Commons Zero, Public Domain Dedication",
+        "AttributionRequired": "false",
+        "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "Copyrighted": "True",
+        "Restrictions": "",
+        "License": "cc0"
+      },
+      "status": "network-verified",
+      "visualReview": "Cityscape/skyline visible in reviewed contact sheet; city identification supported by Commons metadata"
+    },
+    {
+      "id": "82582712",
+      "city": "Singapore",
+      "title": "File:Singapore night.jpg",
+      "creator": "Pierpaolo Lanfrancotti",
+      "license": "CC0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Singapore_night.jpg",
+      "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/80/Singapore_night.jpg/3840px-Singapore_night.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/8/80/Singapore_night.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "sourceDimensions": [
+        4153,
+        2535
+      ],
+      "deliveredDimensions": [
+        3840,
+        2344
+      ],
+      "deliveredBytes": 1423623,
+      "deliveredMime": "image/jpeg",
+      "deliveredSha256": "bb99bebbc20a0b261a1a6bcabd6dc2998f57bf5d13723e7746e6bbc983b247bd",
+      "cropBox": [
+        0,
+        92,
+        3840,
+        2252
+      ],
+      "outputDimensions": [
+        3840,
+        2160
+      ],
+      "outputJpegProbeBytes": 1560646,
+      "extmetadata": {
+        "Categories": {
+          "value": "CC-Zero|Files from external sources with reviewed licenses|Images from Unsplash|Skylines of Singapore|Esplanade Bridge at night",
+          "source": "commons-categories",
+          "hidden": ""
+        },
+        "ImageDescription": {
+          "value": "​新加坡夜景",
+          "source": "commons-desc-page"
+        },
+        "Credit": {
+          "value": "<a rel=\"nofollow\" class=\"external free\" href=\"https://unsplash.com/photos/NKUEACkOhbk\">https://unsplash.com/photos/NKUEACkOhbk</a>",
+          "source": "commons-desc-page"
+        },
+        "Artist": {
+          "value": "Pierpaolo Lanfrancotti",
+          "source": "commons-desc-page"
+        },
+        "LicenseShortName": {
+          "value": "CC0",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "UsageTerms": {
+          "value": "Creative Commons Zero, Public Domain Dedication",
+          "source": "commons-desc-page"
+        },
+        "AttributionRequired": {
+          "value": "false",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "LicenseUrl": {
+          "value": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+          "source": "commons-desc-page"
+        },
+        "Copyrighted": {
+          "value": "True",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "Restrictions": {
+          "value": "",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "License": {
+          "value": "cc0",
+          "source": "commons-templates",
+          "hidden": ""
+        }
+      },
+      "normalizedMetadata": {
+        "Categories": "CC-Zero|Files from external sources with reviewed licenses|Images from Unsplash|Skylines of Singapore|Esplanade Bridge at night",
+        "ImageDescription": "​新加坡夜景",
+        "Credit": "https://unsplash.com/photos/NKUEACkOhbk",
+        "Artist": "Pierpaolo Lanfrancotti",
+        "LicenseShortName": "CC0",
+        "UsageTerms": "Creative Commons Zero, Public Domain Dedication",
+        "AttributionRequired": "false",
+        "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "Copyrighted": "True",
+        "Restrictions": "",
+        "License": "cc0"
+      },
+      "status": "network-verified",
+      "visualReview": "Cityscape/skyline visible in reviewed contact sheet; city identification supported by Commons metadata"
+    },
+    {
+      "id": "27551649",
+      "city": "Chicago",
+      "title": "File:Chicago Skyline - Dusk.JPG",
+      "creator": "Alanthebox",
+      "license": "CC0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Chicago_Skyline_-_Dusk.JPG",
+      "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c2/Chicago_Skyline_-_Dusk.JPG/3840px-Chicago_Skyline_-_Dusk.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/c/c2/Chicago_Skyline_-_Dusk.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "sourceDimensions": [
+        4976,
+        2800
+      ],
+      "deliveredDimensions": [
+        3840,
+        2161
+      ],
+      "deliveredBytes": 849494,
+      "deliveredMime": "image/jpeg",
+      "deliveredSha256": "020986d0d2e1192bcf0db10555a8a1093751a82a34ab7a264e12fcc620f5ab09",
+      "cropBox": [
+        0,
+        0,
+        3840,
+        2160
+      ],
+      "outputDimensions": [
+        3840,
+        2160
+      ],
+      "outputJpegProbeBytes": 968812,
+      "extmetadata": {
+        "Categories": {
+          "value": "Taken with Panasonic Lumix DMC-GH2|CC-Zero|Self-published work|July 2012 in Chicago|Chicago skyline in 2012|Chicago skyline from Lake Michigan",
+          "source": "commons-categories",
+          "hidden": ""
+        },
+        "ImageDescription": {
+          "value": "Skyline of Chicago as seen by boat.",
+          "source": "commons-desc-page"
+        },
+        "Credit": {
+          "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+          "source": "commons-desc-page"
+        },
+        "Artist": {
+          "value": "<a rel=\"mw:WikiLink\" href=\"https://commons.wikimedia.org/wiki/User:Alanthebox\" title=\"User:Alanthebox\">Alanthebox</a>",
+          "source": "commons-desc-page"
+        },
+        "LicenseShortName": {
+          "value": "CC0",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "UsageTerms": {
+          "value": "Creative Commons Zero, Public Domain Dedication",
+          "source": "commons-desc-page"
+        },
+        "AttributionRequired": {
+          "value": "false",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "LicenseUrl": {
+          "value": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+          "source": "commons-desc-page"
+        },
+        "Copyrighted": {
+          "value": "True",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "Restrictions": {
+          "value": "",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "License": {
+          "value": "cc0",
+          "source": "commons-templates",
+          "hidden": ""
+        }
+      },
+      "normalizedMetadata": {
+        "Categories": "Taken with Panasonic Lumix DMC-GH2|CC-Zero|Self-published work|July 2012 in Chicago|Chicago skyline in 2012|Chicago skyline from Lake Michigan",
+        "ImageDescription": "Skyline of Chicago as seen by boat.",
+        "Credit": "Own work",
+        "Artist": "Alanthebox",
+        "LicenseShortName": "CC0",
+        "UsageTerms": "Creative Commons Zero, Public Domain Dedication",
+        "AttributionRequired": "false",
+        "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "Copyrighted": "True",
+        "Restrictions": "",
+        "License": "cc0"
+      },
+      "status": "network-verified",
+      "visualReview": "Cityscape/skyline visible in reviewed contact sheet; city identification supported by Commons metadata"
+    },
+    {
+      "id": "156637992",
+      "city": "Seoul",
+      "title": "File:Seocho-gu Skyline from Han River — Dec 2023.jpg",
+      "creator": "SpaceshipMe",
+      "license": "CC0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Seocho-gu_Skyline_from_Han_River_%E2%80%94_Dec_2023.jpg",
+      "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/30/Seocho-gu_Skyline_from_Han_River_%E2%80%94_Dec_2023.jpg/3840px-Seocho-gu_Skyline_from_Han_River_%E2%80%94_Dec_2023.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/3/30/Seocho-gu_Skyline_from_Han_River_%E2%80%94_Dec_2023.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "sourceDimensions": [
+        4032,
+        3024
+      ],
+      "deliveredDimensions": [
+        3840,
+        2880
+      ],
+      "deliveredBytes": 1309335,
+      "deliveredMime": "image/jpeg",
+      "deliveredSha256": "901f512b3c03d5f21155588eceb82446325a64672444cb24932dd6c7f3b56c98",
+      "cropBox": [
+        0,
+        360,
+        3840,
+        2520
+      ],
+      "outputDimensions": [
+        3840,
+        2160
+      ],
+      "outputJpegProbeBytes": 1184103,
+      "extmetadata": {
+        "Categories": {
+          "value": "Taken with Samsung Galaxy S7 Edge|CC-Zero|Han River (Korea)|Seocho-gu, Seoul|Self-published work|December 2023 in Seoul|Files with coordinates missing SDC location of creation|Rivers in 2023|Skylines in Seoul",
+          "source": "commons-categories",
+          "hidden": ""
+        },
+        "ImageDescription": {
+          "value": "A view of the skyline for Jamwon-dong from the adjacent side of the Han River, taken during sunset on December 12, 2023.",
+          "source": "commons-desc-page"
+        },
+        "Credit": {
+          "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+          "source": "commons-desc-page"
+        },
+        "Artist": {
+          "value": "<a href=\"//commons.wikimedia.org/w/index.php?title=User:SpaceshipMe&amp;action=edit&amp;redlink=1\" class=\"new\" title=\"User:SpaceshipMe (page does not exist)\">SpaceshipMe</a>",
+          "source": "commons-desc-page"
+        },
+        "LicenseShortName": {
+          "value": "CC0",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "UsageTerms": {
+          "value": "Creative Commons Zero, Public Domain Dedication",
+          "source": "commons-desc-page"
+        },
+        "AttributionRequired": {
+          "value": "false",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "LicenseUrl": {
+          "value": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+          "source": "commons-desc-page"
+        },
+        "Copyrighted": {
+          "value": "True",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "Restrictions": {
+          "value": "",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "License": {
+          "value": "cc0",
+          "source": "commons-templates",
+          "hidden": ""
+        }
+      },
+      "normalizedMetadata": {
+        "Categories": "Taken with Samsung Galaxy S7 Edge|CC-Zero|Han River (Korea)|Seocho-gu, Seoul|Self-published work|December 2023 in Seoul|Files with coordinates missing SDC location of creation|Rivers in 2023|Skylines in Seoul",
+        "ImageDescription": "A view of the skyline for Jamwon-dong from the adjacent side of the Han River, taken during sunset on December 12, 2023.",
+        "Credit": "Own work",
+        "Artist": "SpaceshipMe",
+        "LicenseShortName": "CC0",
+        "UsageTerms": "Creative Commons Zero, Public Domain Dedication",
+        "AttributionRequired": "false",
+        "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "Copyrighted": "True",
+        "Restrictions": "",
+        "License": "cc0"
+      },
+      "status": "network-verified",
+      "visualReview": "Cityscape/skyline visible in reviewed contact sheet; city identification supported by Commons metadata"
+    },
+    {
+      "id": "128979726",
+      "city": "Tokyo",
+      "title": "File:Roppongi at night seen from Shibuya Stream.jpg",
+      "creator": "Syced",
+      "license": "CC0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Roppongi_at_night_seen_from_Shibuya_Stream.jpg",
+      "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9f/Roppongi_at_night_seen_from_Shibuya_Stream.jpg/3840px-Roppongi_at_night_seen_from_Shibuya_Stream.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/9/9f/Roppongi_at_night_seen_from_Shibuya_Stream.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "sourceDimensions": [
+        6383,
+        3759
+      ],
+      "deliveredDimensions": [
+        3840,
+        2261
+      ],
+      "deliveredBytes": 1825324,
+      "deliveredMime": "image/jpeg",
+      "deliveredSha256": "684ee962c7c2805aa171257f0235b60ce4e5c015f05bd17a9a6db82584427a25",
+      "cropBox": [
+        0,
+        50,
+        3840,
+        2210
+      ],
+      "outputDimensions": [
+        3840,
+        2160
+      ],
+      "outputJpegProbeBytes": 2066223,
+      "extmetadata": {
+        "Categories": {
+          "value": "CC-Zero|Self-published work|Undated photographs|Uploaded with Mobile/Android|Night in Roppongi|Views from Shibuya Stream at night|Remote views of Tokyo Tower at night|Night skylines in Tokyo",
+          "source": "commons-categories",
+          "hidden": ""
+        },
+        "ImageDescription": {
+          "value": "Roppongi at night seen from Shibuya Stream <span class=\"mw-valign-text-top noprint\" typeof=\"mw:File/Frameless\"><a href=\"//commons.wikimedia.org/wiki/File:Roppongi_at_night_seen_from_Shibuya_Stream.jpg#ooui-php-4\" title=\"Edit this at Structured Data on Commons\"><img alt=\"Edit this at Structured Data on Commons\" src=\"https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8a/OOjs_UI_icon_edit-ltr-progressive.svg/20px-OOjs_UI_icon_edit-ltr-progressive.svg.png?utm_source=commons.wikimedia.org&amp;utm_campaign=parser&amp;utm_content=thumbnail\" decoding=\"async\" loading=\"lazy\" width=\"10\" height=\"10\" class=\"mw-file-element\" data-file-width=\"20\" data-file-height=\"20\"></a></span>",
+          "source": "commons-desc-page"
+        },
+        "Credit": {
+          "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+          "source": "commons-desc-page"
+        },
+        "Artist": {
+          "value": "<a href=\"//commons.wikimedia.org/wiki/User:Syced\" title=\"User:Syced\">Syced</a>",
+          "source": "commons-desc-page"
+        },
+        "LicenseShortName": {
+          "value": "CC0",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "UsageTerms": {
+          "value": "Creative Commons Zero, Public Domain Dedication",
+          "source": "commons-desc-page"
+        },
+        "AttributionRequired": {
+          "value": "false",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "LicenseUrl": {
+          "value": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+          "source": "commons-desc-page"
+        },
+        "Copyrighted": {
+          "value": "True",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "Restrictions": {
+          "value": "",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "License": {
+          "value": "cc0",
+          "source": "commons-templates",
+          "hidden": ""
+        }
+      },
+      "normalizedMetadata": {
+        "Categories": "CC-Zero|Self-published work|Undated photographs|Uploaded with Mobile/Android|Night in Roppongi|Views from Shibuya Stream at night|Remote views of Tokyo Tower at night|Night skylines in Tokyo",
+        "ImageDescription": "Roppongi at night seen from Shibuya Stream",
+        "Credit": "Own work",
+        "Artist": "Syced",
+        "LicenseShortName": "CC0",
+        "UsageTerms": "Creative Commons Zero, Public Domain Dedication",
+        "AttributionRequired": "false",
+        "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "Copyrighted": "True",
+        "Restrictions": "",
+        "License": "cc0"
+      },
+      "status": "network-verified",
+      "visualReview": "Cityscape/skyline visible in reviewed contact sheet; city identification supported by Commons metadata"
+    },
+    {
+      "id": "82523616",
+      "city": "New York",
+      "title": "File:Skyline of Manhattan.jpg",
+      "creator": "Michael Discenza",
+      "license": "CC0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Skyline_of_Manhattan.jpg",
+      "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7e/Skyline_of_Manhattan.jpg/3840px-Skyline_of_Manhattan.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/7/7e/Skyline_of_Manhattan.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "sourceDimensions": [
+        5472,
+        3648
+      ],
+      "deliveredDimensions": [
+        3840,
+        2560
+      ],
+      "deliveredBytes": 3077492,
+      "deliveredMime": "image/jpeg",
+      "deliveredSha256": "3cdde33fe79f925cf0dc96a6d714860e97ec870ec0a456ea336774cbf002b265",
+      "cropBox": [
+        0,
+        200,
+        3840,
+        2360
+      ],
+      "outputDimensions": [
+        3840,
+        2160
+      ],
+      "outputJpegProbeBytes": 2844326,
+      "extmetadata": {
+        "Categories": {
+          "value": "CC-Zero|Files from external sources with reviewed licenses|Images from Unsplash|Midtown Manhattan skylines",
+          "source": "commons-categories",
+          "hidden": ""
+        },
+        "ImageDescription": {
+          "value": "skylines of Manhattan, New York, United States",
+          "source": "commons-desc-page"
+        },
+        "Credit": {
+          "value": "<a rel=\"nofollow\" class=\"external free\" href=\"https://unsplash.com/photos/5omwAMDxmkU\">https://unsplash.com/photos/5omwAMDxmkU</a>",
+          "source": "commons-desc-page"
+        },
+        "Artist": {
+          "value": "Michael Discenza",
+          "source": "commons-desc-page"
+        },
+        "LicenseShortName": {
+          "value": "CC0",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "UsageTerms": {
+          "value": "Creative Commons Zero, Public Domain Dedication",
+          "source": "commons-desc-page"
+        },
+        "AttributionRequired": {
+          "value": "false",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "LicenseUrl": {
+          "value": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+          "source": "commons-desc-page"
+        },
+        "Copyrighted": {
+          "value": "True",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "Restrictions": {
+          "value": "",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "License": {
+          "value": "cc0",
+          "source": "commons-templates",
+          "hidden": ""
+        }
+      },
+      "normalizedMetadata": {
+        "Categories": "CC-Zero|Files from external sources with reviewed licenses|Images from Unsplash|Midtown Manhattan skylines",
+        "ImageDescription": "skylines of Manhattan, New York, United States",
+        "Credit": "https://unsplash.com/photos/5omwAMDxmkU",
+        "Artist": "Michael Discenza",
+        "LicenseShortName": "CC0",
+        "UsageTerms": "Creative Commons Zero, Public Domain Dedication",
+        "AttributionRequired": "false",
+        "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "Copyrighted": "True",
+        "Restrictions": "",
+        "License": "cc0"
+      },
+      "status": "network-verified",
+      "visualReview": "Cityscape/skyline visible in reviewed contact sheet; city identification supported by Commons metadata"
+    },
+    {
+      "id": "176481871",
+      "city": "Hong Kong",
+      "title": "File:Hong Kong Skyline1.jpg",
+      "creator": "Mustang Joe",
+      "license": "CC0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Hong_Kong_Skyline1.jpg",
+      "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a0/Hong_Kong_Skyline1.jpg/3840px-Hong_Kong_Skyline1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/a/a0/Hong_Kong_Skyline1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "sourceDimensions": [
+        6016,
+        4016
+      ],
+      "deliveredDimensions": [
+        3840,
+        2563
+      ],
+      "deliveredBytes": 1683339,
+      "deliveredMime": "image/jpeg",
+      "deliveredSha256": "d4723827594328f4f52a36d60eb4ef6680a18eb4a92823cb38a61d4becff014f",
+      "cropBox": [
+        0,
+        201,
+        3840,
+        2361
+      ],
+      "outputDimensions": [
+        3840,
+        2160
+      ],
+      "outputJpegProbeBytes": 1645798,
+      "extmetadata": {
+        "Categories": {
+          "value": "Taken with Nikon D750|CC-Zero|Clouds in Hong Kong|Files with coordinates missing SDC location of creation|Flickr images reviewed by FlickreviewR 2|Skylines of Hong Kong|Hong Kong photographs taken on 2024-11-16|Photographs by Mustang Joe",
+          "source": "commons-categories",
+          "hidden": ""
+        },
+        "ImageDescription": {
+          "value": "Hong Kong Skyline",
+          "source": "commons-desc-page"
+        },
+        "Credit": {
+          "value": "<a rel=\"nofollow\" class=\"external free\" href=\"https://www.flickr.com/photos/63234672@N04/54703472292/\">https://www.flickr.com/photos/63234672@N04/54703472292/</a>",
+          "source": "commons-desc-page"
+        },
+        "Artist": {
+          "value": "Mustang Joe",
+          "source": "commons-desc-page"
+        },
+        "LicenseShortName": {
+          "value": "CC0",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "UsageTerms": {
+          "value": "Creative Commons Zero, Public Domain Dedication",
+          "source": "commons-desc-page"
+        },
+        "AttributionRequired": {
+          "value": "false",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "LicenseUrl": {
+          "value": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+          "source": "commons-desc-page"
+        },
+        "Copyrighted": {
+          "value": "True",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "Restrictions": {
+          "value": "",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "License": {
+          "value": "cc0",
+          "source": "commons-templates",
+          "hidden": ""
+        }
+      },
+      "normalizedMetadata": {
+        "Categories": "Taken with Nikon D750|CC-Zero|Clouds in Hong Kong|Files with coordinates missing SDC location of creation|Flickr images reviewed by FlickreviewR 2|Skylines of Hong Kong|Hong Kong photographs taken on 2024-11-16|Photographs by Mustang Joe",
+        "ImageDescription": "Hong Kong Skyline",
+        "Credit": "https://www.flickr.com/photos/63234672@N04/54703472292/",
+        "Artist": "Mustang Joe",
+        "LicenseShortName": "CC0",
+        "UsageTerms": "Creative Commons Zero, Public Domain Dedication",
+        "AttributionRequired": "false",
+        "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "Copyrighted": "True",
+        "Restrictions": "",
+        "License": "cc0"
+      },
+      "status": "network-verified",
+      "visualReview": "Cityscape/skyline visible in reviewed contact sheet; city identification supported by Commons metadata"
+    },
+    {
+      "id": "61752098",
+      "city": "Singapore",
+      "title": "File:Chuttersnap 2016-12-23 (Unsplash 6pMroQXkgsw).jpg",
+      "creator": "chuttersnap chuttersnap",
+      "license": "CC0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Chuttersnap_2016-12-23_(Unsplash_6pMroQXkgsw).jpg",
+      "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a0/Chuttersnap_2016-12-23_%28Unsplash_6pMroQXkgsw%29.jpg/3840px-Chuttersnap_2016-12-23_%28Unsplash_6pMroQXkgsw%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/a/a0/Chuttersnap_2016-12-23_%28Unsplash_6pMroQXkgsw%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "sourceDimensions": [
+        6016,
+        4016
+      ],
+      "deliveredDimensions": [
+        3840,
+        2563
+      ],
+      "deliveredBytes": 2097884,
+      "deliveredMime": "image/jpeg",
+      "deliveredSha256": "6ae93d52322a68d12c15b953f0d90541731caf47edc574f4c4a0be74e5c9e54f",
+      "cropBox": [
+        0,
+        201,
+        3840,
+        2361
+      ],
+      "outputDimensions": [
+        3840,
+        2160
+      ],
+      "outputJpegProbeBytes": 2163109,
+      "extmetadata": {
+        "Categories": {
+          "value": "CC-Zero|Images uploaded by Fæ|Images from Unsplash|Night skylines in Singapore|Images from Unsplash (review needed)",
+          "source": "commons-categories",
+          "hidden": ""
+        },
+        "ImageDescription": {
+          "value": "chuttersnap 2016-12-23",
+          "source": "commons-desc-page"
+        },
+        "Credit": {
+          "value": "<p><a rel=\"nofollow\" class=\"external free\" href=\"https://unsplash.com/photos/6pMroQXkgsw\">https://unsplash.com/photos/6pMroQXkgsw</a>\n<bdi lang=\"en\" dir=\"ltr\" title=\"archived on 11 May 2017 at the Wayback Machine\"><a rel=\"nofollow\" class=\"external text\" href=\"https://web.archive.org/web/20170511065706/https%3A//images.unsplash.com/photo-1482502026655-3c0ea360ed3b\">Image</a> at the <span lang=\"en\" dir=\"ltr\"><a href=\"https://en.wikipedia.org/wiki/Wayback_Machine\" class=\"extiw\" title=\"en:Wayback Machine\"><span lang=\"en\" dir=\"ltr\">Wayback Machine</span></a></span></bdi>\n</p>\n<bdi lang=\"en\" dir=\"ltr\" title=\"archived on 28 April 2017 at the Wayback Machine\"><a rel=\"nofollow\" class=\"external text\" href=\"https://web.archive.org/web/20170428165717/https%3A//unsplash.com/photos/6pMroQXkgsw\">Gallery</a> at the <span lang=\"en\" dir=\"ltr\"><a href=\"https://en.wikipedia.org/wiki/Wayback_Machine\" class=\"extiw\" title=\"en:Wayback Machine\"><span lang=\"en\" dir=\"ltr\">Wayback Machine</span></a></span></bdi>",
+          "source": "commons-desc-page"
+        },
+        "Artist": {
+          "value": "chuttersnap <a rel=\"nofollow\" class=\"external text\" href=\"https://unsplash.com/@chuttersnap\">chuttersnap</a>",
+          "source": "commons-desc-page"
+        },
+        "LicenseShortName": {
+          "value": "CC0",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "UsageTerms": {
+          "value": "Creative Commons Zero, Public Domain Dedication",
+          "source": "commons-desc-page"
+        },
+        "AttributionRequired": {
+          "value": "false",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "LicenseUrl": {
+          "value": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+          "source": "commons-desc-page"
+        },
+        "Copyrighted": {
+          "value": "True",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "Restrictions": {
+          "value": "",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "License": {
+          "value": "cc0",
+          "source": "commons-templates",
+          "hidden": ""
+        }
+      },
+      "normalizedMetadata": {
+        "Categories": "CC-Zero|Images uploaded by Fæ|Images from Unsplash|Night skylines in Singapore|Images from Unsplash (review needed)",
+        "ImageDescription": "chuttersnap 2016-12-23",
+        "Credit": "https://unsplash.com/photos/6pMroQXkgsw Image at the Wayback Machine Gallery at the Wayback Machine",
+        "Artist": "chuttersnap chuttersnap",
+        "LicenseShortName": "CC0",
+        "UsageTerms": "Creative Commons Zero, Public Domain Dedication",
+        "AttributionRequired": "false",
+        "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "Copyrighted": "True",
+        "Restrictions": "",
+        "License": "cc0"
+      },
+      "status": "network-verified",
+      "visualReview": "Cityscape/skyline visible in reviewed contact sheet; city identification supported by Commons metadata"
+    },
+    {
+      "id": "179321546",
+      "city": "London",
+      "title": "File:City of London skyline from Dawson Heights, Dulwich (1).jpg",
+      "creator": "FHL2",
+      "license": "CC0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:City_of_London_skyline_from_Dawson_Heights,_Dulwich_(1).jpg",
+      "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/25/City_of_London_skyline_from_Dawson_Heights%2C_Dulwich_%281%29.jpg/3840px-City_of_London_skyline_from_Dawson_Heights%2C_Dulwich_%281%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/2/25/City_of_London_skyline_from_Dawson_Heights%2C_Dulwich_%281%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "sourceDimensions": [
+        4000,
+        3000
+      ],
+      "deliveredDimensions": [
+        3840,
+        2880
+      ],
+      "deliveredBytes": 1400334,
+      "deliveredMime": "image/jpeg",
+      "deliveredSha256": "6f86f837b6598c738c4b589afe487b2af7f184bc73a503f0862515d79ec36748",
+      "cropBox": [
+        0,
+        360,
+        3840,
+        2520
+      ],
+      "outputDimensions": [
+        3840,
+        2160
+      ],
+      "outputJpegProbeBytes": 1144620,
+      "extmetadata": {
+        "Categories": {
+          "value": "CC-Zero|Self-published work|Skyline of the City of London in 2015|Views from Dawson Heights",
+          "source": "commons-categories",
+          "hidden": ""
+        },
+        "ImageDescription": {
+          "value": "City of London skyline from Dawson Heights, Dulwich",
+          "source": "commons-desc-page"
+        },
+        "Credit": {
+          "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+          "source": "commons-desc-page"
+        },
+        "Artist": {
+          "value": "<a href=\"//commons.wikimedia.org/w/index.php?title=User:FHL2&amp;action=edit&amp;redlink=1\" class=\"new\" title=\"User:FHL2 (page does not exist)\">FHL2</a>",
+          "source": "commons-desc-page"
+        },
+        "LicenseShortName": {
+          "value": "CC0",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "UsageTerms": {
+          "value": "Creative Commons Zero, Public Domain Dedication",
+          "source": "commons-desc-page"
+        },
+        "AttributionRequired": {
+          "value": "false",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "LicenseUrl": {
+          "value": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+          "source": "commons-desc-page"
+        },
+        "Copyrighted": {
+          "value": "True",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "Restrictions": {
+          "value": "",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "License": {
+          "value": "cc0",
+          "source": "commons-templates",
+          "hidden": ""
+        }
+      },
+      "normalizedMetadata": {
+        "Categories": "CC-Zero|Self-published work|Skyline of the City of London in 2015|Views from Dawson Heights",
+        "ImageDescription": "City of London skyline from Dawson Heights, Dulwich",
+        "Credit": "Own work",
+        "Artist": "FHL2",
+        "LicenseShortName": "CC0",
+        "UsageTerms": "Creative Commons Zero, Public Domain Dedication",
+        "AttributionRequired": "false",
+        "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "Copyrighted": "True",
+        "Restrictions": "",
+        "License": "cc0"
+      },
+      "status": "network-verified",
+      "visualReview": "Cityscape/skyline visible in reviewed contact sheet; city identification supported by Commons metadata"
+    },
+    {
+      "id": "177756261",
+      "city": "Chicago",
+      "title": "File:Chicago Loop Skyline at Sunset.jpg",
+      "creator": "GazeboJake",
+      "license": "CC0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Chicago_Loop_Skyline_at_Sunset.jpg",
+      "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f1/Chicago_Loop_Skyline_at_Sunset.jpg/3840px-Chicago_Loop_Skyline_at_Sunset.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f1/Chicago_Loop_Skyline_at_Sunset.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "sourceDimensions": [
+        6000,
+        4000
+      ],
+      "deliveredDimensions": [
+        3840,
+        2560
+      ],
+      "deliveredBytes": 1194209,
+      "deliveredMime": "image/jpeg",
+      "deliveredSha256": "6bc8db638bd89868956caa1f79540cfa2eec1a31ea00da69ad0edc156042b76a",
+      "cropBox": [
+        0,
+        200,
+        3840,
+        2360
+      ],
+      "outputDimensions": [
+        3840,
+        2160
+      ],
+      "outputJpegProbeBytes": 1194999,
+      "extmetadata": {
+        "Categories": {
+          "value": "CC-Zero|Self-published work|Files with coordinates missing SDC location of creation|Chicago skyline in 2025|November 2025 in Chicago",
+          "source": "commons-categories",
+          "hidden": ""
+        },
+        "ImageDescription": {
+          "value": "Chicago Loop Skyline at Sunset",
+          "source": "commons-desc-page"
+        },
+        "Credit": {
+          "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+          "source": "commons-desc-page"
+        },
+        "Artist": {
+          "value": "<a href=\"//commons.wikimedia.org/wiki/User:GazeboJake\" title=\"User:GazeboJake\">GazeboJake</a>",
+          "source": "commons-desc-page"
+        },
+        "LicenseShortName": {
+          "value": "CC0",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "UsageTerms": {
+          "value": "Creative Commons Zero, Public Domain Dedication",
+          "source": "commons-desc-page"
+        },
+        "AttributionRequired": {
+          "value": "false",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "LicenseUrl": {
+          "value": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+          "source": "commons-desc-page"
+        },
+        "Copyrighted": {
+          "value": "True",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "Restrictions": {
+          "value": "",
+          "source": "commons-desc-page",
+          "hidden": ""
+        },
+        "License": {
+          "value": "cc0",
+          "source": "commons-templates",
+          "hidden": ""
+        }
+      },
+      "normalizedMetadata": {
+        "Categories": "CC-Zero|Self-published work|Files with coordinates missing SDC location of creation|Chicago skyline in 2025|November 2025 in Chicago",
+        "ImageDescription": "Chicago Loop Skyline at Sunset",
+        "Credit": "Own work",
+        "Artist": "GazeboJake",
+        "LicenseShortName": "CC0",
+        "UsageTerms": "Creative Commons Zero, Public Domain Dedication",
+        "AttributionRequired": "false",
+        "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "Copyrighted": "True",
+        "Restrictions": "",
+        "License": "cc0"
+      },
+      "status": "network-verified",
+      "visualReview": "Cityscape/skyline visible in reviewed contact sheet; city identification supported by Commons metadata"
+    }
+  ],
+  "failures": [],
+  "metadataRequests": [
+    "https://commons.wikimedia.org/w/api.php?action=query&format=json&pageids=115972176%7C150237193%7C39288658%7C82582712&prop=imageinfo&iiprop=url%7Csize%7Cmime%7Cextmetadata&iiurlwidth=3840&iiextmetadatafilter=Artist%7CCredit%7CAttribution%7CLicenseShortName%7CLicenseUrl%7CLicense%7CAttributionRequired%7CRestrictions%7CNonFree%7CCopyrighted%7CUsageTerms%7CImageDescription%7CCategories&iiextmetadatalanguage=en&maxlag=5",
+    "https://commons.wikimedia.org/w/api.php?action=query&format=json&pageids=27551649%7C156637992%7C128979726%7C82523616&prop=imageinfo&iiprop=url%7Csize%7Cmime%7Cextmetadata&iiurlwidth=3840&iiextmetadatafilter=Artist%7CCredit%7CAttribution%7CLicenseShortName%7CLicenseUrl%7CLicense%7CAttributionRequired%7CRestrictions%7CNonFree%7CCopyrighted%7CUsageTerms%7CImageDescription%7CCategories&iiextmetadatalanguage=en&maxlag=5",
+    "https://commons.wikimedia.org/w/api.php?action=query&format=json&pageids=176481871%7C61752098%7C179321546%7C177756261&prop=imageinfo&iiprop=url%7Csize%7Cmime%7Cextmetadata&iiurlwidth=3840&iiextmetadatafilter=Artist%7CCredit%7CAttribution%7CLicenseShortName%7CLicenseUrl%7CLicense%7CAttributionRequired%7CRestrictions%7CNonFree%7CCopyrighted%7CUsageTerms%7CImageDescription%7CCategories&iiextmetadatalanguage=en&maxlag=5",
+    "https://commons.wikimedia.org/w/api.php?action=query&format=json&pageids=66039626&prop=imageinfo&iiprop=url%7Csize%7Cmime%7Cextmetadata&iiurlwidth=3840&iiextmetadatafilter=Artist%7CCredit%7CAttribution%7CLicenseShortName%7CLicenseUrl%7CLicense%7CAttributionRequired%7CRestrictions%7CNonFree%7CCopyrighted%7CUsageTerms%7CImageDescription%7CCategories&iiextmetadatalanguage=en&maxlag=5"
+  ],
+  "caveats": [
+    "Metadata is Commons' assertion, not a legal warranty or worldwide property/model release.",
+    "PD records without LicenseUrl use the PDM status link for details; not a claim that the source explicitly applied PDM.",
+    "Pillow crop probes are not Android BitmapRegionDecoder/device lifecycle tests.",
+    "Native 4K means measured source pixels sufficient for a 4K crop, not independently proven camera/sensor provenance."
+  ],
+  "previousProbe": {
+    "checkedAt": "2026-10-20T22:00:21.171533+00:00",
+    "method": "Live documented API metadata + standard 3840px API-returned JPEG rendition + full Pillow decode + center crop without upscaling. No manually constructed thumbnail URL.",
+    "verifiedCount": 12,
+    "failures": [
+      {
+        "ids": [
+          "177756261",
+          "66039626"
+        ],
+        "stage": "metadata",
+        "error": "<urlopen error [Errno -3] Temporary failure in name resolution>"
+      }
+    ]
+  },
+  "earlierProbeHistory": [
+    {
+      "checkedAt": "2026-10-20T21:58:07.374891+00:00",
+      "method": "Live documented API metadata + bounded original JPEG download + full Pillow decode + center crop without upscaling. No thumbnail URL is used.",
+      "verifiedCount": 3,
+      "failures": [
+        {
+          "id": "39288658",
+          "city": "Hong Kong",
+          "stage": "photo",
+          "error": "HTTP Error 429: Too many requests (f061ab2)"
+        },
+        {
+          "id": "8052366",
+          "city": "Singapore",
+          "stage": "photo",
+          "error": "HTTP Error 429: Too many requests (f061ab2)"
+        },
+        {
+          "id": "181128395",
+          "city": "London",
+          "stage": "photo",
+          "error": "HTTP Error 429: Too many requests (f061ab2)"
+        },
+        {
+          "id": "27551649",
+          "city": "Chicago",
+          "stage": "photo",
+          "error": "HTTP Error 429: Too many requests (f061ab2)"
+        },
+        {
+          "id": "156637992",
+          "city": "Seoul",
+          "stage": "photo",
+          "error": "HTTP Error 429: Too many requests (f061ab2)"
+        },
+        {
+          "id": "128979726",
+          "city": "Tokyo",
+          "stage": "photo",
+          "error": "HTTP Error 429: Too many requests (f061ab2)"
+        },
+        {
+          "id": "176481871",
+          "city": "Hong Kong",
+          "stage": "photo",
+          "error": "HTTP Error 429: Too many requests (f061ab2)"
+        },
+        {
+          "id": "8324827",
+          "city": "Singapore",
+          "stage": "photo",
+          "error": "HTTP Error 429: Too many requests - please contact noc@wikimedia.org to discuss a less disruptive approach or instead use thumbnail images in sizes listed on https://w.wiki/GHai. (0c640b1)"
+        },
+        {
+          "id": "179321546",
+          "city": "London",
+          "stage": "photo",
+          "error": "HTTP Error 429: Too many requests - please contact noc@wikimedia.org to discuss a less disruptive approach or instead use thumbnail images in sizes listed on https://w.wiki/GHai. (0c640b1)"
+        },
+        {
+          "id": "177756261",
+          "city": "Chicago",
+          "stage": "photo",
+          "error": "HTTP Error 429: Too many requests - please contact noc@wikimedia.org to discuss a less disruptive approach or instead use thumbnail images in sizes listed on https://w.wiki/GHai. (0c640b1)"
+        },
+        {
+          "id": "83591142",
+          "city": "Seoul",
+          "stage": "photo",
+          "error": "HTTP Error 429: Too many requests - please contact noc@wikimedia.org to discuss a less disruptive approach or instead use thumbnail images in sizes listed on https://w.wiki/GHai. (0c640b1)"
+        }
+      ]
+    }
+  ],
+  "verifiedCount": 12,
+  "status": "network-verified-visually-reviewed",
+  "contactSheet": "city-source-verification.contact-sheet.jpg",
+  "visualReviewMethod": "Assistant inspected the generated 4K-center-crop contact sheet; checked urban/skyline subject, not independent geographic coordinates or capture provenance.",
+  "rejectedVisualCandidates": [
+    {
+      "id": "181128395",
+      "city": "London",
+      "reason": "Cable-car equipment plaque, not a cityscape, despite search metadata"
+    },
+    {
+      "id": "66039626",
+      "city": "Seoul",
+      "reason": "Road-heavy foreground; excluded for cityscape catalogue quality"
+    }
+  ],
+  "validation": {
+    "realNetwork": "12 retained CC0 photographs across 7 cities; live API metadata and standard 3840px renditions downloaded and fully decoded; contact sheet inspected",
+    "pythonPolicyTests": "PASS: 4 tests",
+    "compiledKotlinPolicyAssertions": "PASS: 2317 assertions via --jvm-self-test",
+    "kotlinCompilation": "python3 scripts/build.py --offline :app:compileDebugKotlin: BUILD SUCCESSFUL",
+    "existingJvmSuite": "python3 scripts/build.py --offline :app:testDebugUnitTest: BUILD SUCCESSFUL",
+    "whitespace": "git --no-pager diff --check: PASS",
+    "androidDeviceTests": "NOT RUN: networking/lifecycle/region-strip rendering and measured allocation require Android device or emulator"
+  }
+}

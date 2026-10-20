@@ -3,7 +3,12 @@ package org.ambientflow.tv
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.net.Uri
+import android.graphics.BitmapRegionDecoder
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.Rect
+import android.graphics.RectF
+import android.os.Looper
 import android.os.SystemClock
 import android.text.Html
 import android.util.AtomicFile
@@ -16,13 +21,18 @@ import org.json.JSONObject
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import java.util.ArrayDeque
-import java.util.Locale
+import java.io.InputStream
+import java.net.URI
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
-import kotlin.math.sqrt
+import java.util.concurrent.atomic.AtomicInteger
+import java.util.concurrent.atomic.AtomicLong
+import java.util.concurrent.locks.ReentrantLock
+import kotlin.concurrent.withLock
 
-/** Attribution belongs with the displayed photograph, including while it is crossfading. */
+/** Source/creator details are preserved; admitted photographs require no copyright credit overlay. */
 data class CityPhoto(
     val id: String,
     val title: String,
@@ -35,446 +45,471 @@ data class CityPhoto(
 )
 
 /**
- * Blocking, worker-thread-only repository. No executor, UI work, or speculative image downloads.
- * Call close() before clear(). Files are private and persistent, not subject to cacheDir eviction.
- * Multiple instances serialize cache access; close() can still cancel a blocked HTTP call.
+ * Curated Commons CC0/public-domain photographs only. All IO/decode methods are worker-only.
+ * Disk locks never span HTTP. Cached photos return without waiting for network refresh;
+ * a single bounded background job fills missing city slots, without decoding/pinning frames.
+ * The parent owns returned bitmaps and the maximum of two live slideshow frames.
  */
 class CityRepository(context: Context) : AutoCloseable {
-    private val directory = File(context.applicationContext.filesDir, CACHE_DIRECTORY)
+    private val app = context.applicationContext
+    private val directory = File(app.filesDir, CACHE_DIRECTORY)
     private val index = AtomicFile(File(directory, "index.json"))
     private val closed = AtomicBoolean(false)
+    private val registration = active.computeIfAbsent(directory.absolutePath) { AtomicInteger() }
+    private val fetchGate = transfers.computeIfAbsent(directory.absolutePath) { AtomicBoolean() }
     private val httpLock = Any()
     private var inFlight: Call? = null
     private val client = OkHttpClient.Builder()
-        .connectTimeout(10, TimeUnit.SECONDS)
-        .readTimeout(15, TimeUnit.SECONDS)
-        .writeTimeout(15, TimeUnit.SECONDS)
-        .callTimeout(30, TimeUnit.SECONDS)
-        .retryOnConnectionFailure(false)
-        // Do not follow a server redirect to an unverified host or downgrade to HTTP.
-        .followRedirects(false)
-        .followSslRedirects(false)
-        .build()
-    private val pending = mutableMapOf<String, ArrayDeque<Candidate>>()
-    private val offsets = mutableMapOf<String, Int>()
-    private val rejected = LinkedHashSet<String>()
-    private var cityCursor = 0
-    private var retryAfter = 0L
+        .connectTimeout(10, TimeUnit.SECONDS).readTimeout(15, TimeUnit.SECONDS)
+        .callTimeout(35, TimeUnit.SECONDS).retryOnConnectionFailure(false)
+        .followRedirects(false).followSslRedirects(false).build()
+    private val warmer = Executors.newSingleThreadExecutor { task -> Thread(task, "city-photo-cache").apply { isDaemon = true } }
+    private val queued = AtomicBoolean(false)
+    private val retryAfter = AtomicLong(0)
+    // All mutable catalogue/cache selection state below is guarded by cacheLock.
+    private var catalogue: List<Seed>? = null
+    private var cityCursor = 0L
+    private val rejectedUntil = mutableMapOf<String, Long>()
+    private val issued = mutableMapOf<String, CityPhoto>()
 
-    init {
-        synchronized(cacheLock) {
-            active[directory.absolutePath] = (active[directory.absolutePath] ?: 0) + 1
-        }
-    }
+    init { registration.incrementAndGet() }
 
-    /** Empty city selections return null. Network/IO failures fall back to a matching cached photo. */
-    fun next(cities: Set<String>, currentId: String?): CityPhoto? = synchronized(cacheLock) {
-        if (closed.get()) return@synchronized null
-        val selected = cities.map { it.trim() }.filter { it.isNotEmpty() && it.length <= 120 }
-            .distinct().sorted()
-        pending.keys.retainAll(selected.toSet())
-        offsets.keys.retainAll(selected.toSet())
-        if (selected.isEmpty()) return@synchronized null
-        try {
-            if (!directory.isDirectory && !directory.mkdirs()) return@synchronized null
+    fun next(cities: Set<String>, currentId: String?): CityPhoto? = worker {
+        val selected = CITIES.filter { it in cities }
+        if (selected.isEmpty()) return@worker null
+        val selection = cacheLock.withLock {
+            checkOpen()
             val entries = load()
-            val city = selected[(cityCursor.toLong() and 0x7fffffffL).rem(selected.size).toInt()]
-            cityCursor++
-            val matching = entries.filter { it.city in selected }
-            val cityEntries = matching.filter { it.city == city }
-            val quota = (MAX_PHOTOS / selected.size).coerceAtLeast(2)
-            val cached = cityEntries.firstOrNull { it.id != currentId }
-                ?: matching.firstOrNull { it.id != currentId }
-                ?: matching.firstOrNull()
-            if ((cityEntries.size >= quota && cached?.city == city && cached.id != currentId) ||
-                SystemClock.elapsedRealtime() < retryAfter
-            ) return@synchronized useCached(entries, cached)
-
-            try {
-                val queue = pending.getOrPut(city) { ArrayDeque() }
-                if (queue.isEmpty()) queue.addAll(search(city))
-                var candidate: Candidate? = null
-                while (queue.isNotEmpty()) {
-                    val item = queue.removeFirst()
-                    if (item.photo.id != currentId && item.photo.id !in rejected &&
-                        entries.none { it.id == item.photo.id }
-                    ) {
-                        candidate = item
-                        break
-                    }
-                }
-                // One metadata request and at most one image download per invocation.
-                if (candidate != null && !closed.get()) {
-                    reserve(entries, currentId)
-                    val photo = candidate.photo
-                    try {
-                        download(candidate)
-                    } catch (e: IOException) {
-                        rejected.add(photo.id)
-                        if (rejected.size > 128) rejected.remove(rejected.first())
-                        throw e
-                    }
-                    if (closed.get()) {
-                        photo.file.delete()
-                        return@synchronized null
-                    }
-                    entries.add(photo)
-                    if (!save(entries)) {
-                        entries.remove(photo)
-                        photo.file.delete()
-                    } else {
-                        return@synchronized photo
-                    }
-                }
-            } catch (_: IOException) {
-                retryAfter = SystemClock.elapsedRealtime() + RETRY_DELAY_MS
-            } catch (_: org.json.JSONException) {
-                retryAfter = SystemClock.elapsedRealtime() + RETRY_DELAY_MS
+            val desired = selected[(cityCursor++ and Long.MAX_VALUE).rem(selected.size).toInt()]
+            val matching = entries.filter { it.photo.city in selected }
+            val cached = matching.firstOrNull { it.photo.city == desired && it.photo.id != currentId }
+                ?: matching.firstOrNull { it.photo.id != currentId } ?: matching.firstOrNull()
+            if (cached != null) {
+                entries.remove(cached)
+                entries.add(cached)
+                save(entries)
             }
-            val remaining = entries.filter { it.city in selected && it.file.isFile }
-            if (closed.get()) null else useCached(entries,
-                remaining.firstOrNull { it.city == city && it.id != currentId }
-                    ?: remaining.firstOrNull { it.id != currentId } ?: remaining.firstOrNull())
-        } catch (_: IOException) {
-            null
-        } catch (_: SecurityException) {
-            null
+            Selection(cached?.photo?.let { issue(it) }, desired, matching.isNotEmpty())
+        }
+        if (selection.hasCache) {
+            // Offline playback never waits for an HTTP timeout or an in-progress download.
+            scheduleWarm(selected, selection.desiredCity, selection.photo?.id ?: currentId)
+            selection.photo
+        } else {
+            // Cold start is already on the caller's worker: one metadata batch, <=2 images.
+            warm(selected, selection.desiredCity, currentId)
+            cacheLock.withLock {
+                val entries = load()
+                val photo = entries.firstOrNull { it.photo.city == selection.desiredCity }
+                    ?: entries.firstOrNull { it.photo.city in selected }
+                photo?.photo?.let { issue(it) }
+            }
         }
     }
 
-    /** Bounds both intermediate sampling and the returned bitmap; never decodes an original URL. */
-    fun decode(photo: CityPhoto): Bitmap? = synchronized(cacheLock) {
-        if (closed.get() || photo.file.parentFile != directory || !photo.file.isFile ||
-            photo.file.length() !in 1..MAX_DOWNLOAD_BYTES
-        ) return@synchronized null
+    private data class Selection(val photo: CityPhoto?, val desiredCity: String, val hasCache: Boolean)
+    private data class Seed(val id: String, val city: String)
+    private data class Entry(val photo: CityPhoto, val info: JSONObject, val checkedAt: Long)
+
+    private fun scheduleWarm(cities: List<String>, desired: String, pinned: String?) {
+        if (closed.get() || SystemClock.elapsedRealtime() < retryAfter.get() || !queued.compareAndSet(false, true)) return
         try {
-            val bounds = imageBounds(photo.file) ?: return@synchronized null
-            var sample = 1
-            while ((bounds.first.toLong() / sample) * (bounds.second.toLong() / sample) > MAX_PIXELS) {
-                sample *= 2
+            warmer.execute {
+                try { worker { warm(cities, desired, pinned); true } }
+                finally { queued.set(false) }
             }
-            val bitmap = BitmapFactory.decodeFile(photo.file.absolutePath, BitmapFactory.Options().apply {
-                inSampleSize = sample
-                inPreferredConfig = Bitmap.Config.ARGB_8888
-            }) ?: return@synchronized null
-            if (closed.get()) {
-                bitmap.recycle()
-                return@synchronized null
-            }
-            // Handle codec sampling round-off as well as unusually wide panoramas.
-            val scale = minOf(1.0, 1920.0 / bitmap.width, 1080.0 / bitmap.height,
-                sqrt(MAX_PIXELS.toDouble() / (bitmap.width.toLong() * bitmap.height)))
-            if (scale >= 1.0) bitmap else {
-                try {
-                    Bitmap.createScaledBitmap(bitmap, (bitmap.width * scale).toInt().coerceAtLeast(1),
-                        (bitmap.height * scale).toInt().coerceAtLeast(1), true)
-                } finally {
-                    bitmap.recycle()
+        } catch (_: java.util.concurrent.RejectedExecutionException) { queued.set(false) }
+    }
+
+    private fun warm(cities: List<String>, desired: String, pinned: String?) {
+        if (closed.get() || SystemClock.elapsedRealtime() < retryAfter.get() || !fetchGate.compareAndSet(false, true)) return
+        try {
+            val batch = cacheLock.withLock {
+                checkOpen()
+                val entries = load()
+                val seeds = seeds()
+                val quota = minOf(2, (MAX_PHOTOS / cities.size).coerceAtLeast(1))
+                val orderedCities = listOf(desired) + cities.filter { it != desired }
+                val pending = orderedCities.associateWith { city ->
+                    if (entries.count { it.photo.city == city } >= minOf(quota, seeds.count { it.city == city })) emptyList()
+                    else seeds.filter { seed -> seed.city == city && entries.none { it.photo.id == seed.id } &&
+                        SystemClock.elapsedRealtime() >= (rejectedUntil[seed.id] ?: 0L) }
                 }
+                // First try one candidate per city, then alternate photos; never a broad search.
+                (orderedCities.mapNotNull { pending[it]?.getOrNull(0) } +
+                    orderedCities.mapNotNull { pending[it]?.getOrNull(1) }).take(4)
             }
+            if (batch.isEmpty()) return
+            val url = API.toHttpUrl().newBuilder()
+                .addQueryParameter("action", "query").addQueryParameter("format", "json")
+                .addQueryParameter("pageids", batch.joinToString("|") { it.id })
+                .addQueryParameter("prop", "imageinfo").addQueryParameter("iiprop", "url|size|mime|extmetadata")
+                .addQueryParameter("iiurlwidth", WIDTH.toString())
+                .addQueryParameter("iiextmetadatafilter", METADATA_FIELDS)
+                .addQueryParameter("iiextmetadatalanguage", "en").addQueryParameter("maxlag", "5").build().toString()
+            val root = JSONObject(String(requestBytes(url), Charsets.UTF_8))
+            if (root.has("error")) throw IOException("Commons API error: ${root.optJSONObject("error")?.optString("code")}")
+            val pages = root.optJSONObject("query")?.optJSONObject("pages")
+            var attempts = 0
+            for (seed in batch) {
+                checkOpen()
+                val page = pages?.optJSONObject(seed.id)
+                val info = page?.optJSONArray("imageinfo")?.optJSONObject(0)
+                val entry = if (page?.optLong("pageid") == seed.id.toLong() && page.optInt("ns") == 6 &&
+                    page.optString("imagerepository") == "local" && page.optString("title").startsWith("File:") && info != null
+                ) entry(seed, plain(page.getString("title").removePrefix("File:")), info, System.currentTimeMillis()) else null
+                if (entry == null) { reject(seed.id); continue }
+                if (attempts++ >= 2) break
+                try {
+                    cacheLock.withLock {
+                        val entries = load()
+                        if (entries.any { it.photo.id == seed.id }) return
+                        reserve(entries, pinned)
+                    }
+                    download(entry)
+                    cacheLock.withLock {
+                        checkOpen()
+                        val entries = load()
+                        if (!File(directory, "download.part").renameTo(entry.photo.file)) throw IOException("Cannot commit photo")
+                        entries.add(entry)
+                        if (!save(entries)) { entry.photo.file.delete(); throw IOException("Cannot commit provenance") }
+                    }
+                    return
+                } catch (e: RateLimited) { throw e }
+                catch (_: IOException) { reject(seed.id) }
+            }
+        } catch (e: RateLimited) {
+            retryAfter.set(SystemClock.elapsedRealtime() + e.delayMs)
+        } catch (_: IOException) {
+            retryAfter.set(SystemClock.elapsedRealtime() + RETRY_MS)
         } catch (_: RuntimeException) {
-            null
-        } catch (_: OutOfMemoryError) {
-            null
+            retryAfter.set(SystemClock.elapsedRealtime() + RETRY_MS)
+        } finally {
+            cacheLock.withLock { File(directory, "download.part").delete() }
+            fetchGate.set(false)
+        }
+    }
+
+    private fun reject(id: String) = cacheLock.withLock {
+        rejectedUntil[id] = SystemClock.elapsedRealtime() + REJECT_MS
+    }
+
+    private fun download(entry: Entry) {
+        val temp = File(directory, "download.part")
+        withResponse(entry.info.getString("thumburl")) { response ->
+            val body = response.body ?: throw IOException("Empty Commons image")
+            if (body.contentType()?.let { "${it.type}/${it.subtype}" } != "image/jpeg" || body.contentLength() > MAX_FILE_BYTES)
+                throw IOException("Invalid JPEG response")
+            FileOutputStream(temp).use { output ->
+                body.byteStream().use { input ->
+                    val buffer = ByteArray(32 * 1024)
+                    var total = 0L
+                    while (true) {
+                        checkOpen()
+                        val count = input.read(buffer)
+                        if (count < 0) break
+                        total += count
+                        if (total > MAX_FILE_BYTES) throw IOException("JPEG exceeds 16 MiB")
+                        output.write(buffer, 0, count)
+                    }
+                }
+                output.fd.sync()
+            }
+        }
+        val bounds = bounds(temp) ?: throw IOException("Invalid/undersized delivered JPEG")
+        if (bounds.first > entry.info.getInt("width") || bounds.second > entry.info.getInt("height"))
+            throw IOException("Delivered dimensions exceed original")
+        checkOpen()
+    }
+
+    /** Exact 3840x2160 RGB565 output. Only small region strips, never a full original, are decoded. */
+    @Suppress("DEPRECATION")
+    fun decode(photo: CityPhoto): Bitmap? = worker {
+        cacheLock.withLock {
+            if (issued[photo.id] != photo) return@withLock null
+            val dimensions = bounds(photo.file) ?: return@withLock null
+            val width = minOf(dimensions.first.toLong(), dimensions.second.toLong() * WIDTH / HEIGHT).toInt()
+            val height = minOf(dimensions.second.toLong(), dimensions.first.toLong() * HEIGHT / WIDTH).toInt()
+            if (width < WIDTH || height < HEIGHT) return@withLock null
+            val left = (dimensions.first - width) / 2
+            val top = (dimensions.second - height) / 2
+            var sample = 1
+            while (width / (sample * 2) >= WIDTH && height / (sample * 2) >= HEIGHT) sample *= 2
+            val decoder = BitmapRegionDecoder.newInstance(photo.file.absolutePath, false) ?: return@withLock null
+            var output: Bitmap? = null
+            try {
+                val frame = Bitmap.createBitmap(WIDTH, HEIGHT, Bitmap.Config.RGB_565)
+                output = frame
+                val canvas = Canvas(frame)
+                val paint = Paint(Paint.FILTER_BITMAP_FLAG or Paint.DITHER_FLAG)
+                val scaleY = HEIGHT.toFloat() / height
+                var y = 0
+                while (y < height) {
+                    checkOpen()
+                    val end = minOf(height, y + 256 * sample)
+                    // A one-sampled-pixel halo avoids filtering seams at strip boundaries.
+                    val startWithHalo = maxOf(0, y - sample)
+                    val endWithHalo = minOf(height, end + sample)
+                    val tile = decoder.decodeRegion(Rect(left, top + startWithHalo, left + width, top + endWithHalo),
+                        BitmapFactory.Options().apply {
+                            inSampleSize = sample; inPreferredConfig = Bitmap.Config.RGB_565; inDither = true
+                        }) ?: throw IOException("Cannot decode JPEG region")
+                    try {
+                        canvas.save()
+                        canvas.clipRect(0f, y * scaleY, WIDTH.toFloat(), end * scaleY)
+                        canvas.drawBitmap(tile, null, RectF(0f, startWithHalo * scaleY, WIDTH.toFloat(), endWithHalo * scaleY), paint)
+                        canvas.restore()
+                    } finally { tile.recycle() }
+                    y = end
+                }
+                checkOpen()
+                output = null
+                frame
+            } finally { output?.recycle(); decoder.recycle() }
         }
     }
 
     override fun close() {
-        synchronized(httpLock) {
-            if (!closed.compareAndSet(false, true)) return
-            inFlight?.cancel()
-            client.dispatcher.cancelAll()
-        }
+        if (!closed.compareAndSet(false, true)) return
+        registration.decrementAndGet()
+        synchronized(httpLock) { inFlight?.cancel() }
+        warmer.shutdownNow()
+        client.dispatcher.cancelAll()
         client.connectionPool.evictAll()
         client.dispatcher.executorService.shutdown()
-        synchronized(cacheLock) {
-            val count = (active[directory.absolutePath] ?: 1) - 1
-            if (count == 0) active.remove(directory.absolutePath) else active[directory.absolutePath] = count
-            pending.clear()
-        }
+        // Never acquire cacheLock, join a worker, or touch disk on the caller/main thread.
     }
 
-    private data class Candidate(val photo: CityPhoto, val url: String)
-
-    private fun search(city: String): List<Candidate> {
-        // imageinfo/extmetadata is the documented Commons API, not scraped HTML or a random image API.
-        // Quote the city as a literal search phrase; do not let user input inject search operators.
-        val phrase = city.replace(Regex("[\\p{Cc}\\\"\\\\]"), " ").trim()
-        if (phrase.isEmpty()) return emptyList()
-        val offset = offsets[city] ?: 0
-        val url = "https://commons.wikimedia.org/w/api.php".toHttpUrl().newBuilder()
-            .addQueryParameter("action", "query")
-            .addQueryParameter("format", "json")
-            .addQueryParameter("generator", "search")
-            .addQueryParameter("gsrsearch", "skyline \"$phrase\" filetype:bitmap")
-            .addQueryParameter("gsrnamespace", "6")
-            .addQueryParameter("gsrlimit", "4")
-            .addQueryParameter("gsroffset", offset.toString())
-            .addQueryParameter("prop", "imageinfo")
-            .addQueryParameter("iiprop", "url|size|mime|extmetadata")
-            .addQueryParameter("iiurlwidth", "1920")
-            .addQueryParameter("iiextmetadatalanguage", "en")
-            .addQueryParameter("maxlag", "5")
-            .build().toString()
-        val root = JSONObject(String(requestBytes(url, MAX_METADATA_BYTES), Charsets.UTF_8))
-        if (root.has("error")) throw IOException("Commons API error")
-        offsets[city] = root.optJSONObject("continue")?.optInt("gsroffset", 0) ?: 0
-        val pages = root.optJSONObject("query")?.optJSONObject("pages") ?: return emptyList()
-        val result = mutableListOf<Pair<Int, Candidate>>()
-        for (key in pages.keys()) {
-            val page = pages.optJSONObject(key) ?: continue
-            val id = page.optLong("pageid", -1).takeIf { it > 0 }?.toString() ?: continue
-            val info = page.optJSONArray("imageinfo")?.optJSONObject(0) ?: continue
-            if (info.optString("mime") !in IMAGE_MIMES) continue
-            val width = info.optInt("thumbwidth", 0)
-            val height = info.optInt("thumbheight", 0)
-            if (width < 640 || height < 360 || width < height || width > 1920 ||
-                width.toLong() * height > MAX_THUMB_PIXELS
-            ) continue
-            val metadata = info.optJSONObject("extmetadata") ?: continue
-            fun field(name: String) = plain(metadata.optJSONObject(name)?.optString("value").orEmpty())
-            val license = field("LicenseShortName")
-            val licenseUrl = normalizedUrl(field("LicenseUrl"))
-            if (!acceptedLicense(license, licenseUrl) || field("Restrictions").isNotBlank() ||
-                field("NonFree").equals("true", true)
-            ) continue
-            val artist = field("Artist")
-            if (artist.isBlank()) continue
-            // Preserve the complete creator and any explicit attribution/credit, not just a link label.
-            val creator = listOf(artist, field("Attribution"), field("Credit"))
-                .filter { it.isNotBlank() }.distinct().joinToString("\n")
-            val source = normalizedUrl(info.optString("descriptionurl"))
-            val thumb = normalizedUrl(info.optString("thumburl"))
-            if (!isSource(source) || !isImageUrl(thumb)) continue
-            val title = plain(page.optString("title").removePrefix("File:"))
-            if (title.isBlank()) continue
-            val photo = CityPhoto(id, title, creator, license, licenseUrl, source, city, imageFile(id))
-            result.add(page.optInt("index", Int.MAX_VALUE) to Candidate(photo, thumb))
-        }
-        return result.sortedBy { it.first }.map { it.second }
+    private fun <T> worker(block: () -> T?): T? {
+        if (Looper.myLooper() == Looper.getMainLooper() || closed.get()) return null
+        return try { block() }
+        catch (_: IOException) { null }
+        catch (_: RuntimeException) { null }
+        catch (_: OutOfMemoryError) { null }
     }
 
-    private fun download(candidate: Candidate) {
-        val temp = File(directory, "download.part")
-        try {
-            withResponse(candidate.url) { response ->
-                val body = response.body ?: throw IOException("Empty thumbnail")
-                val mime = body.contentType()?.let { "${it.type}/${it.subtype}" }
-                if (mime !in IMAGE_MIMES || body.contentLength() > MAX_DOWNLOAD_BYTES) {
-                    throw IOException("Invalid thumbnail type or size")
-                }
-                FileOutputStream(temp).use { output ->
-                    body.byteStream().use { input ->
-                        val buffer = ByteArray(32 * 1024)
-                        var total = 0L
-                        while (true) {
-                            if (closed.get()) throw IOException("Repository closed")
-                            val count = input.read(buffer)
-                            if (count == -1) break
-                            total += count
-                            if (total > MAX_DOWNLOAD_BYTES) throw IOException("Thumbnail exceeds 16 MiB")
-                            output.write(buffer, 0, count)
-                        }
-                    }
-                    output.fd.sync()
-                }
-            }
-            val bounds = imageBounds(temp) ?: throw IOException("Invalid landscape bitmap")
-            if (bounds.first > 1920 || bounds.first.toLong() * bounds.second > MAX_THUMB_PIXELS) {
-                throw IOException("Unexpected thumbnail dimensions")
-            }
-            if (closed.get() || !temp.renameTo(candidate.photo.file)) throw IOException("Thumbnail not committed")
-        } finally {
-            temp.delete()
-        }
+    private fun checkOpen() {
+        if (closed.get() || Thread.currentThread().isInterrupted) throw IOException("Repository closed")
     }
 
-    private fun <T> withResponse(url: String, block: (okhttp3.Response) -> T): T {
-        val call = synchronized(httpLock) {
-            if (closed.get()) throw IOException("Repository closed")
-            client.newCall(Request.Builder().url(url).header("User-Agent", USER_AGENT).build())
-                .also { inFlight = it }
-        }
-        try {
-            return call.execute().use { response ->
-                if (!response.isSuccessful) throw IOException("Commons HTTP ${response.code}")
-                block(response)
-            }
-        } finally {
-            synchronized(httpLock) { if (inFlight === call) inFlight = null }
-        }
-    }
-
-    private fun requestBytes(url: String, limit: Long): ByteArray = withResponse(url) { response ->
-        val body = response.body ?: throw IOException("Empty metadata")
-        if (body.contentLength() > limit) throw IOException("Metadata too large")
-        body.byteStream().use { input ->
-            val output = java.io.ByteArrayOutputStream()
-            val buffer = ByteArray(8192)
-            while (true) {
-                if (closed.get()) throw IOException("Repository closed")
-                val count = input.read(buffer)
-                if (count == -1) break
-                if (output.size().toLong() + count > limit) throw IOException("Metadata too large")
-                output.write(buffer, 0, count)
-            }
-            output.toByteArray()
-        }
-    }
-
-    private fun imageBounds(file: File): Pair<Int, Int>? {
-        val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-        BitmapFactory.decodeFile(file.absolutePath, options)
-        return if (options.outWidth >= 640 && options.outHeight >= 360 &&
-            options.outWidth >= options.outHeight && options.outWidth <= 32768 &&
-            options.outHeight <= 32768 && options.outMimeType in IMAGE_MIMES
-        ) options.outWidth to options.outHeight else null
-    }
-
-    private fun imageFile(id: String) = File(directory, "$id.img")
-
-    private fun load(): MutableList<CityPhoto> {
-        val entries = mutableListOf<CityPhoto>()
-        try {
-            val bytes = index.openRead().use { input ->
-                val output = java.io.ByteArrayOutputStream()
-                val buffer = ByteArray(8192)
-                while (true) {
-                    val count = input.read(buffer)
-                    if (count < 0) break
-                    if (output.size().toLong() + count > MAX_METADATA_BYTES) throw IOException("Index too large")
-                    output.write(buffer, 0, count)
-                }
-                output.toByteArray()
-            }
-            val root = JSONObject(String(bytes, Charsets.UTF_8))
-            if (root.optInt("version") != 1) throw IOException("Unknown cache version")
-            val array = root.getJSONArray("photos")
-            for (i in 0 until minOf(array.length(), MAX_PHOTOS)) {
-                val item = array.optJSONObject(i) ?: continue
-                val id = item.optString("id")
-                if (!id.matches(Regex("[1-9][0-9]{0,19}")) || entries.any { it.id == id }) continue
-                val file = imageFile(id)
-                val photo = CityPhoto(id, item.optString("title"), item.optString("creator"),
-                    item.optString("license"), item.optString("licenseUrl"), item.optString("sourceUrl"),
-                    item.optString("city"), file)
-                if (file.isFile && file.length() in 1..MAX_DOWNLOAD_BYTES && photo.city.isNotBlank() &&
-                    photo.title.isNotBlank() && photo.creator.isNotBlank() && isSource(photo.sourceUrl) &&
-                    acceptedLicense(photo.license, photo.licenseUrl)
-                ) entries.add(photo)
-            }
-        } catch (_: IOException) {
-            // Missing/interrupted/corrupt indices never turn unverified orphan files into photos.
-        } catch (_: org.json.JSONException) {
-            entries.clear()
-        }
-        while (entries.sumOf { it.file.length() } > IMAGE_BUDGET) entries.removeAt(0)
-        val keep = entries.map { it.file.name }.toSet() + setOf("index.json", "index.json.bak", "index.json.new")
-        directory.listFiles()?.filter { it.name !in keep }?.forEach { it.delete() }
-        return entries
-    }
-
-    private fun reserve(entries: MutableList<CityPhoto>, currentId: String?) {
-        // Reserve the entire capped download before writing .part: even peak disk use stays bounded.
-        while (entries.size >= MAX_PHOTOS || entries.sumOf { it.file.length() } > IMAGE_BUDGET - MAX_DOWNLOAD_BYTES) {
-            val victim = entries.firstOrNull { it.id != currentId } ?: throw IOException("Cache is pinned")
-            entries.remove(victim)
-            if (!save(entries)) throw IOException("Cannot update cache index")
-            if (!victim.file.delete() && victim.file.exists()) throw IOException("Cannot evict cached photo")
-        }
-    }
-
-    private fun useCached(entries: MutableList<CityPhoto>, photo: CityPhoto?): CityPhoto? {
-        if (photo == null || !photo.file.isFile || closed.get()) return null
-        entries.remove(photo)
-        entries.add(photo)
-        save(entries)
+    private fun issue(photo: CityPhoto): CityPhoto? {
+        checkOpen()
+        issued[photo.id] = photo
         return photo
     }
 
-    private fun save(entries: List<CityPhoto>): Boolean {
-        val array = JSONArray()
-        entries.forEach { photo ->
-            array.put(JSONObject().put("id", photo.id).put("title", photo.title).put("creator", photo.creator)
-                .put("license", photo.license).put("licenseUrl", photo.licenseUrl)
-                .put("sourceUrl", photo.sourceUrl).put("city", photo.city))
+    private fun seeds(): List<Seed> {
+        catalogue?.let { return it }
+        val root = JSONObject(app.assets.open("cityscapes.json").use { String(it.readCapped(MAX_METADATA_BYTES), Charsets.UTF_8) })
+        if (root.getInt("version") != 2 || root.getString("mode") != "automatic-curated-commons") throw IOException("Unknown catalogue")
+        val photos = root.getJSONArray("photos")
+        if (photos.length() !in 7..28) throw IOException("Invalid catalogue size")
+        val result = mutableListOf<Seed>()
+        for (i in 0 until photos.length()) {
+            val item = photos.getJSONObject(i)
+            val seed = Seed(item.getString("id"), item.getString("city"))
+            if (!seed.id.matches(Regex("[1-9][0-9]{0,19}")) || seed.city !in CITIES || result.any { it.id == seed.id })
+                throw IOException("Invalid catalogue record")
+            result.add(seed)
         }
-        val bytes = JSONObject().put("version", 1).put("photos", array).toString().toByteArray(Charsets.UTF_8)
-        if (bytes.size > MAX_METADATA_BYTES) return false
-        var stream: FileOutputStream? = null
-        return try {
-            stream = index.startWrite()
-            stream.write(bytes)
-            index.finishWrite(stream)
-            true
-        } catch (_: IOException) {
-            index.failWrite(stream)
-            false
+        catalogue = result
+        return result
+    }
+
+    private fun entry(seed: Seed, title: String, info: JSONObject, checkedAt: Long): Entry? {
+        if (title.isBlank() || title.length > 500 || !qualifies(info.optInt("width"), info.optInt("height")) ||
+            !qualifies(info.optInt("thumbwidth"), info.optInt("thumbheight")) ||
+            info.optInt("thumbwidth") > info.optInt("width") || info.optInt("thumbheight") > info.optInt("height") ||
+            info.optString("mime") != "image/jpeg" || info.optLong("size") !in 1..MAX_FILE_BYTES ||
+            !safeUrl(info.optString("thumburl"), false) || !safeUrl(info.optString("descriptionurl"), true)
+        ) return null
+        val metadata = info.optJSONObject("extmetadata") ?: return null
+        fun field(name: String) = plain(metadata.optJSONObject(name)?.optString("value").orEmpty())
+        if (!metadata.has("Restrictions")) return null
+        val license = field("LicenseShortName")
+        val licenseUrl = canonicalLicense(license, field("License"), field("LicenseUrl"), field("AttributionRequired"),
+            field("Restrictions"), field("NonFree"), field("Copyrighted")) ?: return null
+        val artist = field("Artist")
+        if (artist.isBlank()) return null
+        val creator = listOf(artist, field("Attribution"), field("Credit")).filter { it.isNotBlank() }.distinct().joinToString("\n")
+        if (creator.length > 8000) return null
+        return Entry(CityPhoto(seed.id, title, creator, license, licenseUrl, info.getString("descriptionurl"), seed.city,
+            File(directory, "${seed.id}.jpg")), info, checkedAt)
+    }
+
+    private fun load(): MutableList<Entry> {
+        val entries = mutableListOf<Entry>()
+        val seeds = seeds().associateBy { it.id }
+        try {
+            val root = JSONObject(index.openRead().use { String(it.readCapped(MAX_METADATA_BYTES), Charsets.UTF_8) })
+            if (root.getInt("version") != 2) throw IOException("Unknown cache version")
+            val array = root.getJSONArray("photos")
+            for (i in 0 until minOf(array.length(), MAX_PHOTOS)) {
+                val item = array.getJSONObject(i)
+                val seed = seeds[item.getString("id")] ?: continue
+                if (item.getString("city") != seed.city || entries.any { it.photo.id == seed.id }) continue
+                val candidate = entry(seed, item.getString("title"), item.getJSONObject("info"), item.getLong("checkedAt")) ?: continue
+                val dimensions = bounds(candidate.photo.file) ?: continue
+                if (dimensions.first <= candidate.info.getInt("width") && dimensions.second <= candidate.info.getInt("height")) entries.add(candidate)
+            }
+        } catch (_: IOException) { entries.clear() }
+        catch (_: org.json.JSONException) { entries.clear() }
+        while (entries.sumOf { it.photo.file.length() } > IMAGE_BUDGET) entries.removeAt(0)
+        val keep = entries.map { it.photo.file.name }.toSet() + setOf("index.json", "index.json.bak", "index.json.new") +
+            if (fetchGate.get()) setOf("download.part") else emptySet()
+        directory.listFiles()?.filter { it.name !in keep }?.forEach {
+            if (!it.isFile || (!it.delete() && it.exists())) throw IOException("Cannot remove orphan cache file")
+        }
+        issued.keys.retainAll(entries.map { it.photo.id }.toSet())
+        return entries
+    }
+
+    private fun reserve(entries: MutableList<Entry>, pinned: String?) {
+        if (!directory.isDirectory && !directory.mkdirs()) throw IOException("Cannot create cache")
+        while (entries.size >= MAX_PHOTOS || entries.sumOf { it.photo.file.length() } > IMAGE_BUDGET - MAX_FILE_BYTES) {
+            val victim = entries.firstOrNull { it.photo.id != pinned } ?: throw IOException("Cache pinned")
+            entries.remove(victim)
+            if (!save(entries)) throw IOException("Cannot update cache index")
+            issued.remove(victim.photo.id)
+            if (!victim.photo.file.delete() && victim.photo.file.exists()) throw IOException("Cannot evict photo")
         }
     }
 
-    companion object {
-        private const val CACHE_DIRECTORY = "commons-city-photos"
-        private const val MAX_PHOTOS = 12
-        private const val MAX_DOWNLOAD_BYTES = 16L * 1024 * 1024
-        private const val MAX_METADATA_BYTES = 512L * 1024
-        // Leave space for both atomic index generations, in addition to the image download reserve.
-        private const val IMAGE_BUDGET = 64L * 1024 * 1024 - 2 * MAX_METADATA_BYTES
-        private const val MAX_PIXELS = 1920L * 1080
-        private const val MAX_THUMB_PIXELS = 1920L * 1920
-        private const val RETRY_DELAY_MS = 60_000L
-        private const val USER_AGENT = "AmbientFlowTV/1.0 (Android; city slideshow; Wikimedia Commons imageinfo)"
-        private val IMAGE_MIMES = setOf("image/jpeg", "image/png", "image/webp")
-        private val cacheLock = Any()
-        private val active = mutableMapOf<String, Int>()
+    private fun save(entries: List<Entry>): Boolean {
+        val array = JSONArray()
+        entries.forEach { item -> array.put(JSONObject().put("id", item.photo.id).put("city", item.photo.city)
+            .put("title", item.photo.title).put("info", item.info).put("checkedAt", item.checkedAt)) }
+        val bytes = JSONObject().put("version", 2).put("photos", array).toString().toByteArray(Charsets.UTF_8)
+        if (bytes.size > MAX_METADATA_BYTES) return false
+        var stream: FileOutputStream? = null
+        return try {
+            stream = index.startWrite(); stream.write(bytes); index.finishWrite(stream); true
+        } catch (_: IOException) { index.failWrite(stream); false }
+    }
 
-        /** No-op while any repository for this private directory is running. Never deletes parent data. */
+    private class RateLimited(val delayMs: Long) : IOException("Commons rate limited")
+
+    private fun <T> withResponse(url: String, block: (okhttp3.Response) -> T): T {
+        checkOpen()
+        val call = synchronized(httpLock) {
+            checkOpen()
+            client.newCall(Request.Builder().url(url).header("User-Agent", USER_AGENT).build()).also { inFlight = it }
+        }
+        try {
+            return call.execute().use { response ->
+                if (response.code == 429 || response.code == 503) {
+                    val delay = response.header("Retry-After")?.toLongOrNull()?.coerceIn(60, 86400)?.times(1000) ?: REJECT_MS
+                    throw RateLimited(delay)
+                }
+                if (!response.isSuccessful) throw IOException("Commons HTTP ${response.code}")
+                block(response)
+            }
+        } finally { synchronized(httpLock) { if (inFlight === call) inFlight = null } }
+    }
+
+    private fun requestBytes(url: String) = withResponse(url) { response ->
+        val body = response.body ?: throw IOException("Empty metadata")
+        if (body.contentLength() > MAX_METADATA_BYTES) throw IOException("Metadata too large")
+        body.byteStream().use { it.readCapped(MAX_METADATA_BYTES) }
+    }
+
+    private fun InputStream.readCapped(limit: Long): ByteArray {
+        val output = java.io.ByteArrayOutputStream()
+        val buffer = ByteArray(8192)
+        while (true) {
+            checkOpen()
+            val count = read(buffer)
+            if (count < 0) break
+            if (output.size().toLong() + count > limit) throw IOException("Metadata too large")
+            output.write(buffer, 0, count)
+        }
+        return output.toByteArray()
+    }
+
+    companion object {
+        private const val CACHE_DIRECTORY = "commons-unrestricted-city-4k-v2"
+        private const val WIDTH = 3840
+        private const val HEIGHT = 2160
+        private const val MAX_PHOTOS = 12
+        private const val MAX_FILE_BYTES = 16L * 1024 * 1024
+        private const val MAX_METADATA_BYTES = 512L * 1024
+        private const val IMAGE_BUDGET = 64L * 1024 * 1024 - 2 * MAX_METADATA_BYTES
+        private const val RETRY_MS = 60_000L
+        private const val REJECT_MS = 15 * 60_000L
+        private const val API = "https://commons.wikimedia.org/w/api.php"
+        private const val METADATA_FIELDS = "Artist|Credit|Attribution|LicenseShortName|LicenseUrl|License|AttributionRequired|Restrictions|NonFree|Copyrighted|UsageTerms|ImageDescription|Categories"
+        private const val USER_AGENT = "AmbientFlowTV/1.0 (Android cityscape viewer; documented Commons Action API)"
+        private val CITIES = listOf("Tokyo", "New York", "Hong Kong", "Singapore", "London", "Chicago", "Seoul")
+        private val cacheLock = ReentrantLock()
+        private val active = ConcurrentHashMap<String, AtomicInteger>()
+        private val transfers = ConcurrentHashMap<String, AtomicBoolean>()
+
+        /** Both a landscape original and its delivered rendition must satisfy this policy. */
+        @JvmStatic
+        fun qualifies(width: Int, height: Int) = width in WIDTH..7680 && height in HEIGHT..5120 && width > height
+
+        /** Pure eligibility policy; no BY/SA/FAL/GFDL, unknown, multi-license or restricted fallback. */
+        @JvmStatic
+        fun canonicalLicense(name: String, code: String, url: String, attribution: String,
+            restrictions: String, nonFree: String = "", copyrighted: String = ""): String? {
+            if (!attribution.equals("false", true) || restrictions.isNotEmpty() ||
+                !(nonFree.isEmpty() || nonFree.equals("false", true))) return null
+            val kind = when {
+                name == "CC0" && code == "cc0" -> "zero"
+                name == "Public domain" && code == "pd" && copyrighted.equals("false", true) -> "mark"
+                else -> return null
+            }
+            val canonical = "https://creativecommons.org/publicdomain/$kind/1.0/"
+            // PD-self commonly has no LicenseUrl: retain its explicit pd/false status,
+            // with a PDM explanatory link, not an invented source-license assertion.
+            if (kind == "mark" && url.isEmpty()) return canonical
+            return try {
+                val uri = URI(url)
+                if (uri.scheme !in setOf("https", "http") || uri.rawAuthority != "creativecommons.org" ||
+                    uri.query != null || uri.fragment != null ||
+                    !uri.path.matches(Regex("/publicdomain/$kind/1\\.0(?:/deed(?:\\.[a-zA-Z_-]+)?)?/?"))) null
+                else canonical
+            } catch (_: Exception) { null }
+        }
+
+        private fun safeUrl(value: String, source: Boolean): Boolean = try {
+            val uri = URI(value)
+            uri.scheme == "https" && uri.port == -1 && uri.userInfo == null && uri.fragment == null &&
+                if (source) uri.rawAuthority == "commons.wikimedia.org" && uri.path.startsWith("/wiki/File:")
+                else uri.rawAuthority in setOf("upload.wikimedia.org", "thumb.wikimedia.org") && uri.path.startsWith("/wikipedia/commons/")
+        } catch (_: Exception) { false }
+
+        private fun plain(value: String) = Html.fromHtml(value, Html.FROM_HTML_MODE_LEGACY).toString().replace('\u00a0', ' ').trim()
+
+        private fun bounds(file: File): Pair<Int, Int>? {
+            if (!file.isFile || file.length() !in 1..MAX_FILE_BYTES) return null
+            val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+            BitmapFactory.decodeFile(file.absolutePath, options)
+            return if (options.outMimeType == "image/jpeg" && qualifies(options.outWidth, options.outHeight))
+                options.outWidth to options.outHeight else null
+        }
+
+        /** Worker-only, no-op while active/transferring/busy; only owned namespaces are deleted. */
         @JvmStatic
         fun clear(context: Context) {
-            val directory = File(context.applicationContext.filesDir, CACHE_DIRECTORY)
-            synchronized(cacheLock) {
-                if ((active[directory.absolutePath] ?: 0) != 0) return
-                try {
-                    directory.deleteRecursively()
-                } catch (_: SecurityException) {
-                    // A failed clear is safe; a later repository will validate any remaining files.
+            if (Looper.myLooper() == Looper.getMainLooper() || !cacheLock.tryLock()) return
+            try {
+                val root = context.applicationContext.filesDir
+                val key = File(root, CACHE_DIRECTORY).absolutePath
+                if ((active[key]?.get() ?: 0) != 0 || transfers[key]?.get() == true) return
+                for (name in listOf(CACHE_DIRECTORY, "commons-city-photos", "unsplash-local-city-4k-v1")) {
+                    val target = File(root, name)
+                    if (target.canonicalFile.parentFile == root.canonicalFile && target.canonicalFile.name == name) deleteOwned(target)
                 }
-            }
+            } catch (_: IOException) { }
+            catch (_: SecurityException) { }
+            finally { cacheLock.unlock() }
         }
 
-        private fun plain(html: String): String = Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY)
-            .toString().replace('\u00a0', ' ').trim()
-
-        private fun normalizedUrl(value: String): String = when {
-            value.startsWith("//") -> "https:$value"
-            value.startsWith("http://") -> "https:" + value.removePrefix("http:")
-            else -> value
-        }
-
-        private fun isSource(value: String): Boolean {
-            val uri = Uri.parse(value)
-            return uri.scheme == "https" && uri.host == "commons.wikimedia.org" &&
-                uri.userInfo == null && uri.port == -1 && uri.path.orEmpty().startsWith("/wiki/File:")
-        }
-
-        private fun isImageUrl(value: String): Boolean {
-            val uri = Uri.parse(value)
-            return uri.scheme == "https" && uri.host in setOf("upload.wikimedia.org", "thumb.wikimedia.org") &&
-                uri.userInfo == null && uri.port == -1 && uri.path.orEmpty().startsWith("/wikipedia/commons/")
-        }
-
-        private fun acceptedLicense(name: String, url: String): Boolean {
-            val uri = Uri.parse(url)
-            if (uri.scheme != "https" || uri.host != "creativecommons.org" ||
-                uri.userInfo != null || uri.port != -1 || uri.query != null || uri.fragment != null
-            ) return false
-            val path = uri.path.orEmpty().trimEnd('/').lowercase(Locale.ROOT)
-            if (name.equals("CC0", true)) return path == "/publicdomain/zero/1.0"
-            if (name.equals("Public domain", true)) return path == "/publicdomain/mark/1.0"
-            val match = Regex("CC BY(-SA)? (1\\.0|2\\.0|2\\.5|3\\.0|4\\.0)", RegexOption.IGNORE_CASE)
-                .matchEntire(name) ?: return false
-            val kind = if (match.groupValues[1].isEmpty()) "by" else "by-sa"
-            return path == "/licenses/$kind/${match.groupValues[2]}"
+        private fun deleteOwned(file: File) {
+            if (file.canonicalFile != file.absoluteFile) { file.delete(); return }
+            if (file.isDirectory) file.listFiles()?.forEach { deleteOwned(it) }
+            file.delete()
         }
     }
 }

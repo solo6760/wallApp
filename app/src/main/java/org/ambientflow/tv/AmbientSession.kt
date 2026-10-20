@@ -41,7 +41,7 @@ class AmbientSession(private val context:Context, private val exit:()->Unit) {
     private val p=Prefs(context)
     private val flow=FlowView(context)
     private val image=PhotoView(context)
-    private val credits=TvUi.text(context,"",12f)
+
     private val clock=TvUi.text(context,"",26f)
     private val controls=LinearLayout(context).apply { orientation=LinearLayout.VERTICAL; setPadding(24,12,24,12); setBackgroundColor(0xeb0c131c.toInt()) }
     private val buttons=LinearLayout(context).apply { orientation=LinearLayout.HORIZONTAL }
@@ -55,7 +55,7 @@ class AmbientSession(private val context:Context, private val exit:()->Unit) {
     private var loading=false
     private var paused=false
     private var photo:CityPhoto?=null
-    private var oldPhoto:CityPhoto?=null
+
     private var cityMode=false
     private val hide=Runnable { controls.visibility=View.GONE; root.requestFocus() }
     private val advance=Runnable { if(!paused) next() }
@@ -63,8 +63,7 @@ class AmbientSession(private val context:Context, private val exit:()->Unit) {
     init {
         root.addView(flow,FrameLayout.LayoutParams(-1,-1)); root.addView(image,FrameLayout.LayoutParams(-1,-1))
         root.addView(clock,FrameLayout.LayoutParams(-2,-2,Gravity.BOTTOM or Gravity.RIGHT).apply { setMargins(36,32,36,48) })
-        credits.setShadowLayer(3f,0f,1f,Color.BLACK); credits.setBackgroundColor(0x78000000); credits.maxLines=3
-        root.addView(credits,FrameLayout.LayoutParams(-1,-2,Gravity.BOTTOM).apply { leftMargin=24; rightMargin=24; bottomMargin=8 })
+
         controls.addView(status)
         controls.addView(HorizontalScrollView(context).apply { isHorizontalScrollBarEnabled=false; addView(buttons) })
         root.addView(controls,FrameLayout.LayoutParams(-1,-2,Gravity.TOP))
@@ -90,19 +89,19 @@ class AmbientSession(private val context:Context, private val exit:()->Unit) {
     private fun schedule() { main.removeCallbacks(advance); if(active&&cityMode&&!paused) main.postDelayed(advance,when(p.str("interval","1 minute")) { "30 seconds"->30000L; "5 minutes"->300000L; else->60000L }) }
     private fun next() {
         if(!active||loading)return
+        // Keep only the current and incoming 4K frames; do not queue decodes during a fade.
+        if(image.previous!=null) return
         loading=true; main.removeCallbacks(advance)
         val token=generation; val repository=repo?:return; val id=photo?.id; val cities=p.cities()
         worker?.execute {
             val item=try { repository.next(cities,id) } catch(_:Exception) { null }
-            val bitmap=item?.let { try { repository.decode(it) } catch(_:Exception) { null } }
+            val bitmap=item?.takeIf { it.id!=id }?.let { try { repository.decode(it) } catch(_:Exception) { null } }
             main.post {
                 if(!active||token!=generation) { bitmap?.recycle(); return@post }
                 loading=false
                 if(item!=null&&bitmap!=null) {
-                    oldPhoto=photo; photo=item; image.previous=image.current; image.current=bitmap; image.fadeStart=SystemClock.elapsedRealtime(); image.invalidate()
-                    credits.text=listOfNotNull(oldPhoto?.let { "${it.creator} · ${it.license}" },"${item.title.removePrefix("File:")} · ${item.creator} · ${item.license} · Wikimedia Commons · cropped to fit").joinToString("\n")
+                    photo=item; image.previous=image.current; image.current=bitmap; image.fadeStart=SystemClock.elapsedRealtime(); image.invalidate()
                     flow.stop()
-                    main.postDelayed({ if(active&&token==generation) { oldPhoto=null; credits.text="${item.title.removePrefix("File:")} · ${item.creator} · ${item.license} · Wikimedia Commons · cropped to fit" } },1850)
                 } else if(photo==null) status.text="Cityscapes unavailable · showing Flow until photos arrive"
                 schedule()
             }
@@ -110,7 +109,7 @@ class AmbientSession(private val context:Context, private val exit:()->Unit) {
     }
     fun stop() {
         if(!active)return
-        active=false; generation++; main.removeCallbacksAndMessages(null); clock.animate().cancel(); flow.stop(); image.clear(); photo=null; oldPhoto=null
+        active=false; generation++; main.removeCallbacksAndMessages(null); clock.animate().cancel(); flow.stop(); image.clear(); photo=null
         repo?.close(); repo=null; worker?.shutdownNow(); worker=null; loading=false; audio?.release(); audio=null
     }
     fun reveal() { controls.visibility=View.VISIBLE; main.removeCallbacks(hide); main.postDelayed(hide,7000); if(!controls.hasFocus()) buttons.getChildAt(0).requestFocus() }
@@ -131,7 +130,7 @@ class AmbientSession(private val context:Context, private val exit:()->Unit) {
         if(p.bool("date")) parts+=SimpleDateFormat("EEE, MMM d",Locale.getDefault()).format(now)
         clock.text=parts.joinToString("\n"); clock.setShadowLayer(4f,0f,1f,Color.BLACK)
         val placement=p.str("placement","Bottom right")
-        (clock.layoutParams as FrameLayout.LayoutParams).apply { gravity=(if(placement.startsWith("Top")) Gravity.TOP else Gravity.BOTTOM) or (if(placement.endsWith("left")) Gravity.LEFT else Gravity.RIGHT); bottomMargin=TvUi.dp(context,72); topMargin=TvUi.dp(context,32) }.also { clock.layoutParams=it }
+        (clock.layoutParams as FrameLayout.LayoutParams).apply { gravity=(if(placement.startsWith("Top")) Gravity.TOP else Gravity.BOTTOM) or (if(placement.endsWith("left")) Gravity.LEFT else Gravity.RIGHT); bottomMargin=TvUi.dp(context,32); topMargin=TvUi.dp(context,32) }.also { clock.layoutParams=it }
         clock.animate().translationX(if((System.currentTimeMillis()/300000)%2==0L) 0f else -TvUi.dp(context,12).toFloat()).setDuration(5000).start()
     }
     private fun details() {

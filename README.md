@@ -1,14 +1,22 @@
-# wallApp
+# wallpApp
 
 A personal Android tablet and TV ambient display and screensaver, with one shared APK for touch and remote control. No launcher replacement, system-package disabling, ads, analytics, account, or API key is required.
 
-- **Flow:** original evolving ribbon art drawn with Android Canvas; approximately 30 fps scheduling (33 ms), not a measured device frame-rate claim. Still and reduced-motion options, time-of-day palettes.
-- **Cityscapes:** Wikimedia Commons skyline photographs for Tokyo, New York, Hong Kong, Singapore, London, Chicago, and Seoul. Crossfades, optional subtle zoom, 30-second/1-minute/5-minute intervals; Flow fallback when no photograph is available.
+- **Flow:** original open-filament art drawn with Android Canvas, overhauled to follow the filament preview rather than filled ribbons. Four compositions—**Folded stream, Interwoven loops, Drifting knot, Orbital bloom**—plus **Automatic**, selectable in Settings. Sage is the new default palette; existing saved palette choices remain unchanged, including time-of-day Automatic. Still and reduced-motion options; approximately 30 fps scheduling (33 ms), not a measured device frame-rate claim.
+- **Cityscapes:** automatic fetching from a curated catalogue of **12 verified CC0 Wikimedia Commons photographs**, covering Tokyo, New York, Hong Kong, Singapore, London, Chicago, and Seoul. Native **3840 × 2160** decoded crops without upscaling, no ambient photo-credit overlay, and opt-in Image details with creator/source/license links. Crossfades, optional subtle zoom, 30-second/1-minute/5-minute intervals; Flow fallback when no photograph is available.
 - **Music:** optional native audio-only Media3 playback, best-effort NewPipe extraction of the default [Lofi Girl stream](https://www.youtube.com/watch?v=rFZHOHl-L8A), direct HTTPS audio, or a local file chosen through Android's document picker. No media is bundled. Music defaults off.
 - Optional clock/date, placement, volume/mute, and native touch + D-pad controls. Pages scroll vertically; the ambient button strip scrolls horizontally. Tap the ambient canvas or press OK/arrows to reveal controls; Back exits; media Play/Pause and Next are handled. Controls hide after seven seconds.
 - Landscape, full-screen activities on both tablet and TV. The ambient activity requests immersive system-bar hiding; menus use a full-screen theme, so the navigation bar may remain. Dream orientation and system bars depend on firmware.
 
-**Status:** debug APK built; three unit tests and Android lint passed (zero lint errors). The exact-stream JVM extraction/HTTP probe was rerun successfully. **No tablet or TV runtime testing has been performed.** See [verification and known issues](docs/verification.md).
+**Version 1.1** (`versionCode` 2). Integrated debug build, all **15 JVM tests**, and Android lint passed (zero errors). The new APK retains the previous debug signing key for `adb install -r` updates. The city-source evidence records all 12 real images; the unchanged audio integration's prior exact-stream JVM extraction/HTTP probe is retained separately. **No tablet or TV runtime testing is claimed.** See [verification and device checklist](docs/verification.md).
+
+### Flow compositions
+
+Settings → **Flow composition** offers Automatic and the four named compositions. Automatic holds each for **150 motion-seconds**, then morphs to the next over **30 motion-seconds**; motion speed and reduced motion stretch that wall-clock duration, and Still freezes automatic progression. Changing the selector blends from the current shape over approximately **8 elapsed seconds** while Flow is running, including in Still mode.
+
+![Host-rendered Flow composition preview](docs/flow-compositions.png)
+
+This is a **host-rendered source preview, not an Android screenshot** or evidence of device rendering/performance.
 
 ## Requirements and build
 
@@ -88,7 +96,7 @@ adb -s $TV_SERIAL shell am start -n org.ambientflow.tv/.SettingsActivity
 
 The example assumes authorized network ADB is already offered by the TV. Wireless-debugging pairing and connection ports may differ; follow the TV's instructions (including pairing if required), rather than assuming port 5555 is available. No `adb tcpip`, root, launcher replacement, package disabling, or other system changes are needed. Use a trusted network and disable debugging when finished.
 
-Package: `org.ambientflow.tv`. Exact public components:
+Package remains **`org.ambientflow.tv`** in v1.1. Install with **`adb install -r`** as above to preserve preferences and app data when upgrading an existing installation signed with the **same debug key**. Version code increases to 2; do not uninstall merely to update a matching-key build. Exact public components:
 
 - `org.ambientflow.tv/.MainActivity` — tablet/TV launcher menu.
 - `org.ambientflow.tv/.AmbientActivity` — manual ambient display.
@@ -103,11 +111,13 @@ Open the app's **Screensaver setup**, or the normal device screensaver menu: com
 
 For TVs hiding the picker, use [the inspected, reversible ADB procedure](docs/verification.md#screensaver-inspect-select-restore). It records exact prior values, including absent entries, for the explicit device/user before selecting the dream. It never disables a system screensaver, launcher, or other package, and never automatically changes activation triggers.
 
-## Photographs, credits, and privacy
+## Photographs, source details, and privacy
 
-Cityscapes requests Commons `imageinfo/extmetadata` and bounded thumbnails, not original-size images. The persistent, private photo cache is capped at **12 photographs / 64 MiB** including reserved download/index space, with a **16 MiB** per-download cap. Decoding is bounded to **1920 × 1080**. Cached photographs and attribution permit offline reuse; an empty/unusable cache falls back to Flow. Exit ambient sessions before **Settings → Clear photo cache**; clearing is a no-op while a repository is active. Uninstall removes private data.
+The requirement permits **any suitable 4K provider**, not an Unsplash-only source; v1.1 implements a fixed reviewed **Wikimedia Commons** catalogue, not an arbitrary-provider search. It uses documented `imageinfo/extmetadata` requests for reviewed file IDs and API-returned standard 3840px renditions: **no scraping, API key, account, or local-import setup**. Both original and delivered dimensions must be at least **3840 × 2160**, with enough measured pixels for a centered 16:9 crop. Metadata and downloaded JPEG dimensions are checked; a nominal “4K” URL is not sufficient. All 12 current records are CC0. Strict runtime eligibility accepts only matching CC0 or explicitly non-attribution-required public-domain metadata with empty restrictions; BY/BY-SA, unknown licenses and undersized images are rejected without relaxing the policy.
 
-The overlay identifies creators/licenses (including both images during a crossfade); **Image details** displays full creator/credit, file title, Commons source URL, license name/URL, and the crop/scale/optional zoom disclosure. The overlay has limited space: use Image details for the complete credit. A browser is optional; full links remain visible. Eligible metadata includes CC BY, CC BY-SA, CC0, and marked public-domain works; no blanket photo license is granted by this app. Read each source page before reuse. See [full notices](THIRD_PARTY_NOTICES.md).
+Decoding uses small region strips into an exact **3840 × 2160 RGB565** frame, never a full-original bitmap or a 1080p fallback. A frame is about **15.8 MiB**, two crossfade frames about **31.6 MiB**, plus temporary decode/native overhead; this is a source-level memory budget, not a hardware measurement. The private disk cache is capped at **12 photographs / 64 MiB** including reserved download/index space, with a **16 MiB** per-download cap. Matching cached images return without waiting for network work; a single bounded background warmer fills missing selected-city slots. An empty/unusable cache falls back to Flow. The new `commons-unrestricted-city-4k-v2` namespace never loads older BY/BY-SA records. Exit ambient sessions before **Settings → Clear photo cache**; clearing is a no-op while active/busy and also removes the two old owned cache namespaces. Uninstall removes private data.
+
+There is **no ambient photograph-credit overlay**, including during crossfades. **Image details** is opt-in and retains creator/credit, title, Commons source and license links, and crop/optional pan/zoom information. [Commons reuse guidance](https://commons.wikimedia.org/wiki/Commons:Reusing_content_outside_Wikimedia) requires checking each file's terms; Commons is not a blanket license or a copyright warranty. [CC0](https://creativecommons.org/publicdomain/zero/1.0/) imposes no copyright-attribution condition, unlike CC BY/BY-SA. Other rights—including privacy, publicity, trademarks and rights in depicted works—can still apply; do not imply endorsement. See [full notices](THIRD_PARTY_NOTICES.md), [source verification](docs/city-source-verification.md), and the [per-image evidence](docs/city-source-verification.json).
 
 Flow works offline. Cityscapes contacts Wikimedia; default music contacts YouTube and delivery hosts; a custom stream contacts its provider. Providers see ordinary network/request information, including your IP. Audio streaming has no app-managed persistent media cache. Local files need an Android document picker and persistable read permission. No extraction success confers music, performance, download, redistribution, or other media rights. Source/service changes, region restrictions, rate limits, and network failures can break playback. Use only content you may lawfully access.
 
@@ -118,4 +128,3 @@ Enable **Automatic music** in Settings or Music on the home screen; it then star
 ## License and scope
 
 Ambient Flow is **GPL-3.0-or-later**, without warranty; see the full [LICENSE](LICENSE). Third-party licenses and media rights remain distinct. Anyone distributing an APK, including modified downstream builds, must meet the applicable GPL corresponding-source and notice obligations; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Personal sideloading is the intended use. There is **no Google Play acceptance/policy compliance guarantee**, no affiliation with Google, YouTube, Wikimedia, Lofi Girl, or NewPipe, and no guarantee of any particular TV's firmware behavior.
-# wallApp

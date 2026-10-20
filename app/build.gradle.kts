@@ -2,7 +2,7 @@ plugins { id("com.android.application") }
 android {
     namespace = "org.ambientflow.tv"
     compileSdk { version = release(36) { minorApiLevel = 1 } }
-    defaultConfig { applicationId = "org.ambientflow.tv"; minSdk = 26; targetSdk = 32; versionCode = 1; versionName = "1.0"; testInstrumentationRunner = "android.test.InstrumentationTestRunner" }
+    defaultConfig { applicationId = "org.ambientflow.tv"; minSdk = 26; targetSdk = 32; versionCode = 2; versionName = "1.1"; testInstrumentationRunner = "android.test.InstrumentationTestRunner" }
     compileOptions { sourceCompatibility = JavaVersion.VERSION_17; targetCompatibility = JavaVersion.VERSION_17; isCoreLibraryDesugaringEnabled = true }
     buildTypes { getByName("release") { isMinifyEnabled = false } }
     packaging { resources.excludes += setOf("META-INF/DEPENDENCIES", "META-INF/INDEX.LIST") }

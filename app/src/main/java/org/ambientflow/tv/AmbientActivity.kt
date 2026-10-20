@@ -28,8 +28,8 @@ class AmbientDreamService:DreamService() {
 class ImageDetailsActivity:Activity() {
     override fun onCreate(b:Bundle?) {
         super.onCreate(b)
-        val col=TvUi.page(this,intent.getStringExtra("title")?:"Image details","Photograph from Wikimedia Commons")
-        col.addView(TvUi.text(this,"Creator / credit: ${intent.getStringExtra("creator")}\nLicense: ${intent.getStringExtra("license")}\nDisplay changes: scaled, cropped, optional pan/zoom. No modified image is saved."))
+        val col=TvUi.page(this,intent.getStringExtra("title")?:"Image details","4K cityscape · source information")
+        col.addView(TvUi.text(this,"Creator / credit: ${intent.getStringExtra("creator")}\nLicense: ${intent.getStringExtra("license")}\nDisplay: native-resolution 3840×2160 crop, optional pan/zoom. CC0 / public-domain source; no on-screen credit is required."))
         for((label,key) in listOf("Original and full source details" to "source","License terms" to "licenseUrl")) {
             val url=intent.getStringExtra(key)?:continue
             col.addView(TvUi.text(this,url,16f))

@@ -2,9 +2,36 @@
 
 ## Evidence and limits (2026-10-20)
 
-**Final host validation:** `python3 scripts/build.py --offline :app:assembleDebug :app:testDebugUnitTest :app:lintDebug` passed. Three palette tests passed, lint has zero errors (remaining warnings include English-only strings, deliberate landscape orientation and pinned dependency versions). APK signature and manifest were inspected after packaging. `python3 scripts/audio/probe.py --network` was rerun successfully against the exact livestream. The Commons repository implementer verified an actual 1920×835 JPEG download (645,762 bytes). **No device installation, Android playback, dream activation, measured performance, touch-navigation, or remote-navigation pass is claimed.** `adb devices -l` listed no connected devices, no AVD was configured, and `/dev/kvm` was unavailable.
+**v1.1 integrated validation passed:** `python3 scripts/build.py --offline :app:assembleDebug :app:testDebugUnitTest :app:lintDebug` completed successfully. All 15 JVM tests passed (10 geometry/composition tests, 5 palette tests); lint reported zero errors. `python3 scripts/verify-city-catalog.py --self-test --jvm-self-test` passed four Python policy tests and 2,317 assertions against the actual compiled Kotlin eligibility policy, and audited the saved network evidence for all 12 CC0 photos. `apksigner verify --print-certs` passed; the new and previous APK have the same debug signing certificate (SHA-256 `9b6716d7a686ee479b94fe3024db1b6489e6824f5bb2bab365477f6d929e26bf`), so `adb install -r` supports an in-place update. Final artifact hashes are in `dist/SHA256SUMS`. The exact-stream JVM extraction/HTTP probe below is retained as prior host evidence; audio source is unchanged.
 
-Current manifest, build configuration/helper, native UI/session code, and media/cache declarations were inspected for this documentation update. Existing dependency notices and the prior audio-probe record were reviewed; this is not an exhaustive code audit or final runtime dependency inventory. Package/component declarations and build versions are documented in the README. Android 12 is API 31; the app targets API 32 (12L) with min API 26 and compile SDK 36.1.
+**No device installation, Android playback, dream activation, measured performance, touch-navigation, or remote-navigation pass is claimed.** The final `adb devices -l` check listed no connected devices. No hardware behavior is inferred from successful host builds, tests or previews.
+
+Current Flow geometry/composition handling, photo repository, UI source, version declaration and city-source evidence were inspected for this update; this is not an exhaustive code audit. Version is **1.1**, code **2**, package unchanged at `org.ambientflow.tv`. An `adb install -r` upgrade preserves app data/preferences when signed with the same debug key; a different key cannot update the existing installation. Android 12 is API 31; the app targets API 32 (12L), min API 26, compile SDK 36.1. Existing dependency-license appendices and music caveats remain applicable.
+
+### Flow source and preview evidence
+
+The Flow overhaul uses open Canvas filaments rather than filled ribbon surfaces. `FlowView.compositions` exposes **Automatic, Folded stream, Interwoven loops, Drifting knot, Orbital bloom**, with a **Flow composition** selector in Settings. New/missing palette preferences default to **Sage**; saved manual palette values and the original time-of-day families are preserved. Composition Automatic and palette Automatic are separate settings.
+
+Automatic holds each shape for **150 motion-seconds**, then morphs over **30 motion-seconds**. Motion speed/reduced motion scale that time; Still freezes automatic progression. A manual selector change blends from current weights over approximately **8 elapsed seconds** while running, even in Still. The 33 ms callback schedule is not a measured 30 fps guarantee. Retained geometry/paths and small decode strips are implementation choices, not measured CPU/GPU/memory results.
+
+![Host-rendered four-composition preview](flow-compositions.png)
+
+`docs/flow-compositions.png` is a **host-rendered source preview, not an Android screenshot**. It supports visual review of the composition design, not Android Canvas fidelity, frame rate, TV color reproduction or input behavior.
+
+### Cityscapes: actual source evidence and current policy
+
+The requirement permits **any suitable 4K provider**; the implementation uses a curated Commons catalogue, without scraping, API keys or local imports. [City-source verification](city-source-verification.md) and its [per-image JSON proof](city-source-verification.json) record **12 real network-downloaded and fully decoded CC0 photographs covering all seven supported cities**. They include original and delivered dimensions, creator/source/license metadata, byte counts, hashes and crop geometry. The evidence is for those actual images at probe time, not a promise of future availability or independently verified camera history.
+
+Current source enforces:
+
+- Reviewed Commons file IDs only; explicit no-attribution status, empty restrictions and matching CC0/public-domain metadata. All 12 current records are CC0. CC BY/BY-SA, unknown licenses, nonfree flags and insufficient dimensions fail closed.
+- **Original and delivered dimensions ≥3840 × 2160**, plus a measured centered crop large enough for exact **3840 × 2160 RGB565** output without upscaling. API-returned standard 3840px renditions are measured; there is no smaller-image/1080p fallback or full-original bitmap allocation.
+- Region-strip decoding with a small filtering halo; about **15.8 MiB** per output frame and **31.6 MiB** for two crossfade frames, plus temporary strips/native overhead. These are calculated budgets, not device allocation measurements.
+- **12 photos / 64 MiB** private disk budget including reserved download/index space; **16 MiB** per-download cap. Cached images return without awaiting HTTP; one bounded background warmer fills selected-city gaps and stops requesting once its targets are met. Empty/unusable cache retains Flow.
+- The `commons-unrestricted-city-4k-v2` namespace does not load older attribution-required BY/BY-SA entries. Cache clearing also deletes the two old owned namespaces, but no-ops while active/transferring/busy; exit ambient sessions first.
+- **No ambient photo-credit overlay**, including crossfades. Optional Image details retains creator/credit, title, source/license links and crop/pan/zoom disclosure. Under [CC0](https://creativecommons.org/publicdomain/zero/1.0/), copyright attribution is not a condition; [Commons guidance](https://commons.wikimedia.org/wiki/Commons:Reusing_content_outside_Wikimedia) distinguishes each file's copyright terms from other privacy, publicity, trademark and similar rights. Metadata is not a rights warranty.
+
+The city-source report separately records its network probes, compiled Kotlin policy checks and intermediate compilation/unit-test outcomes. Those are not final integrated v1.1 build results or Android bitmap/network integration tests. Do not rerun the network probe just to check documentation: it overwrites evidence and resets visual review to pending.
 
 ### Exact-source JVM audio check — passed and rerun
 
@@ -123,8 +150,8 @@ Record device model, firmware/API, Android user, APK SHA-256, build log, and tes
 - Tablet: tap all controls/dialogs, swipe native vertical pages and the horizontal ambient button strip, tap the canvas to reveal controls, test Back, keyboard/URL input, and narrow landscape layouts. TV: banner, D-pad focus and scrolling to every control, dialogs, Back, OK, media keys, and seven-second control auto-hide.
 - Test manual `AmbientActivity`, pause/resume/Next/settings/exit; confirm no work/audio remains after exit, Home, screen-off, dream stop, or focus loss.
 - Select `AmbientDreamService` through Settings; test Preview and genuine idle/dock entry under the user's chosen triggers. Confirm the original dream returns after restore.
-- Flow: palettes, Still/reduced motion, clock/date/placement, animation smoothness, long-run memory/CPU, and burn-in considerations. “30 fps” is scheduling intent, not a measured benchmark or burn-in guarantee.
-- Cityscapes: all selected cities, intervals, no-network/empty-cache Flow fallback, cache limits and clear-after-exit, decode bounds, crossfades, full Image details/source/license links, and attribution legibility. Try long credits and no browser.
+- Flow: all four compositions and Automatic; selector focus/touch, interruption of a morph, 150/30 motion-second hold/morph timing, eight-second manual blend, Still/reduced motion, Sage default versus preserved saved palettes, clock/date/placement, smoothness, long-run memory/CPU and burn-in considerations. “30 fps” is scheduling intent, not a measured benchmark or burn-in guarantee.
+- Cityscapes: all seven selected cities, intervals, no-network/empty-cache Flow fallback, immediate cached playback while warming, bounded network requests, quota pressure and clear-after-exit (including legacy caches), process-death recovery, cancellation, exact 4K dimensions/no upscaling, strip seams/color/EXIF orientation, low-memory behavior and recycling of two crossfade frames. Confirm no credit overlay; open full Image details/source/license links explicitly, including long creator text and no browser.
 - Audio: exact default live stream decoded on TV, direct HTTPS HLS/DASH/progressive audio and local document URI; volume/mute; another app already playing; permanent/transient focus loss; no unrequested resume; network loss/retry; stop during extraction; no video decoder. Check Android 12 and any other supported devices separately.
 - Check no cleartext traffic, bundled media, analytics, account prompts, or unintended system-setting changes. Disable debugging after testing.
 
@@ -137,13 +164,8 @@ python3 scripts/build.py :app:dependencies --configuration debugRuntimeClasspath
 
 Review task outcomes: `NO-SOURCE` is not a passing test suite. Archive the actual runtime dependency resolution and obtain matching dependency sources/notices before packaging a release; caches contain obsolete versions and build-only artifacts too.
 
-## Source-review findings for the app maintainer (not fixed here)
+## Remaining verification boundaries
 
-These are source-level risks, not reproduced device failures; app code is intentionally unchanged:
+The independent audio probe does not mirror the full runtime graph: the existing inventory identifies jsoup 1.22.2's RE2/J 1.8 dependency as absent from the probe's explicit download list. Prior exact-stream success is not a general extraction/runtime compatibility guarantee. Menu full-screen styling also is not the same as immersive navigation-bar hiding; DreamService orientation/system bars remain firmware-dependent. Confirm these on hardware rather than treating source inspection as a pass.
 
-1. Pause now invalidates in-flight photo completion using a session generation token; a stale decoded result is discarded. On returning from Settings a fresh initial city image may be loaded while paused because prior bitmaps are released on visibility loss. Scheduling remains paused. Verify pause/resume semantics across Settings/focus transitions on hardware.
-2. The credit overlay uses `maxLines=3`; full creator/credit text exists in Image details, but long multi-author/crossfade credits can be visually truncated. Verify attribution presentation against individual image terms before redistribution.
-3. The independent audio probe does not mirror the full runtime graph: the existing inventory identifies jsoup 1.22.2's RE2/J 1.8 dependency as absent from the probe's explicit download list. The prior exact-stream success is not a general extraction/runtime compatibility guarantee.
-4. Menu full-screen styling is not the same as immersive navigation-bar hiding; DreamService landscape behavior is not explicitly requested by an activity manifest entry. Confirm tablet navigation bars and OEM dream orientation on hardware.
-
-No application code, Gradle configuration, build helper, or screensaver helper was changed for this documentation update. Only README, LICENSE, third-party notices, and this record were written. Android 12 AOSP key definitions and absence of a dream-start shell handler were checked online; the full GPLv3 license text was fetched from GCC's upstream mirror after GNU's text endpoint was unavailable. Existing full dependency-license appendices were retained, with tagged NewPipe and OkHttp licensing cross-checked online. These documentation/source checks are not builds, tests, or device verification. The parent maintainer is handling build/test validation; record actual results separately.
+This documentation task changed only `README.md`, `THIRD_PARTY_NOTICES.md` and `docs/verification.md`. The original music caveats, screensaver safety procedure and full dependency-license appendices were preserved. Official Commons reuse guidance and the CC0 deed were checked for the distinction between copyright-attribution conditions and other rights. No assets or `dist/` files were updated here; the parent maintainer handles notice synchronization, final validation and packaging. These documentation/source checks are not builds, tests or device verification.

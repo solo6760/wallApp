@@ -30,8 +30,8 @@ class MainActivity:Activity() {
     override fun onResume() { super.onResume(); render() }
     private fun render() {
         val p=Prefs(this); val col=TvUi.page(this,"Ambient Flow","A quieter canvas for your living room")
-        col.addView(TvUi.button(this,"Flow  ·  Original evolving ribbon art" + if(p.str("mode","Flow")=="Flow") "  ✓" else "") { p.put("mode","Flow"); render() })
-        col.addView(TvUi.button(this,"Cityscapes  ·  A window onto the world" + if(p.str("mode","Flow")=="Cityscapes") "  ✓" else "") { p.put("mode","Cityscapes"); render() })
+        col.addView(TvUi.button(this,"Flow  ·  Moving filament sculptures" + if(p.str("mode","Flow")=="Flow") "  ✓" else "") { p.put("mode","Flow"); render() })
+        col.addView(TvUi.button(this,"Cityscapes  ·  4K city photography" + if(p.str("mode","Flow")=="Cityscapes") "  ✓" else "") { p.put("mode","Cityscapes"); render() })
         col.addView(TvUi.button(this,"Music: ${if(p.bool("music")) "On" else "Off"}") { p.put("music",!p.bool("music")); render() })
         col.addView(TvUi.button(this,"Start ambient display") { startActivity(Intent(this,AmbientActivity::class.java)) })
         col.addView(TvUi.button(this,"Settings") { startActivity(Intent(this,SettingsActivity::class.java)) })
@@ -47,7 +47,8 @@ class SettingsActivity:Activity() {
         fun choice(title:String,key:String,values:Array<String>,default:String) { col.addView(TvUi.button(this,"$title: ${p.str(key,default)}") { AlertDialog.Builder(this).setTitle(title).setSingleChoiceItems(values,values.indexOf(p.str(key,default))) { d,i -> p.put(key,values[i]); d.dismiss(); render() }.setNegativeButton("Cancel",null).show() }) }
         fun toggle(title:String,key:String,default:Boolean=false) { col.addView(TvUi.button(this,"$title: ${if(p.bool(key,default)) "On" else "Off"}") { p.put(key,!p.bool(key,default)); render() }) }
         choice("Visual mode","mode",arrayOf("Flow","Cityscapes"),"Flow")
-        choice("Flow palette","palette",FlowView.names,"Automatic")
+        choice("Flow composition","composition",FlowView.compositions,"Automatic")
+        choice("Flow palette","palette",FlowView.names,"Sage")
         choice("Motion","speed",arrayOf("Still","Slow","Gentle","Normal"),"Slow")
         toggle("Reduced motion","reduced")
         choice("Slideshow interval","interval",arrayOf("30 seconds","1 minute","5 minutes"),"1 minute")
@@ -69,7 +70,7 @@ class SettingsActivity:Activity() {
         toggle("Clock","clock"); toggle("Date","date"); toggle("24-hour clock","24hour",true)
         choice("Clock placement","placement",arrayOf("Bottom right","Bottom left","Top right","Top left"),"Bottom right")
         col.addView(TvUi.button(this,"Clear photo cache (up to 64 MiB / 12 photos)") { Thread { CityRepository.clear(this); runOnUiThread { Toast.makeText(this,"Cache cleared if no ambient session is active",Toast.LENGTH_LONG).show() } }.start() })
-        col.addView(TvUi.button(this,"Licenses and source information") { AlertDialog.Builder(this).setTitle("Open source · no ads or analytics").setMessage("Ambient Flow: GPL-3.0-or-later\nNewPipeExtractor: GPL-3.0-or-later\nMedia3, OkHttp: Apache-2.0\nCommons photographs: individual licenses and creators available in Image details. Display may crop/scale photos.\nLofi Girl music is streamed, not bundled or relicensed.\nFull notices accompany the source ZIP.").setNeutralButton("Full notices") { _,_ -> startActivity(Intent(this,NoticesActivity::class.java)) }.setPositiveButton("OK",null).show() })
+        col.addView(TvUi.button(this,"Licenses and source information") { AlertDialog.Builder(this).setTitle("Open source · no ads or analytics").setMessage("Ambient Flow: GPL-3.0-or-later\nNewPipeExtractor: GPL-3.0-or-later\nMedia3, OkHttp: Apache-2.0\nCity photographs: CC0 / public domain only. No credit overlay. Optional source details available through Image details. Native 4K crop, no upscaling.\nLofi Girl music is streamed, not bundled or relicensed.\nFull notices accompany the source ZIP.").setNeutralButton("Full notices") { _,_ -> startActivity(Intent(this,NoticesActivity::class.java)) }.setPositiveButton("OK",null).show() })
         col.addView(TvUi.button(this,"Done") { finish() })
     }
     @Deprecated("Platform result API") override fun onActivityResult(requestCode:Int,resultCode:Int,data:Intent?) { super.onActivityResult(requestCode,resultCode,data); if(requestCode==7 && resultCode==RESULT_OK) data?.data?.let { uri -> try { contentResolver.takePersistableUriPermission(uri,Intent.FLAG_GRANT_READ_URI_PERMISSION); p.put("source",uri.toString()) } catch(_:SecurityException) { Toast.makeText(this,"Cannot retain file access",Toast.LENGTH_LONG).show() } } }
